@@ -1,4 +1,4 @@
-package com.gestaoCash.model;
+package com.gestaocash.model;
 
 import java.time.LocalDate;
 

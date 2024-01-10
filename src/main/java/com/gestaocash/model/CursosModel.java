@@ -1,4 +1,4 @@
-package com.gestaoCash.model;
+package com.gestaocash.model;
 
 public class CursosModel {
     private int id;
