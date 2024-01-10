@@ -1,12 +1,11 @@
-package com.gestaocash.services;
+package com.gestaoCash.services;
 
 import java.util.List;
-
 import java.util.Optional;
 
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import com.gestaocash.model.Users;
+import com.gestaoCash.model.Users;
 
 public interface UserService {
   void saveUser(Users user);

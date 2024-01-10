@@ -1,4 +1,4 @@
-package com.gestaocash.utils;
+package com.gestaoCash.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

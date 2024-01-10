@@ -1,4 +1,4 @@
-package com.gestaocash.enums;
+package com.gestaoCash.enums;
 
 public enum StateEnum {
 	 AC("AC", "Acre"),

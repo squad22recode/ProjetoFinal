@@ -1,8 +1,8 @@
-package com.gestaocash.services;
+package com.gestaoCash.services;
 
 import java.util.List;
 
-import com.gestaocash.model.Revenue;
+import com.gestaoCash.model.Revenue;
 
 public interface RevenueService {
   void saveRevenue(Revenue revenue);

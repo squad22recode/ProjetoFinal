@@ -1,4 +1,4 @@
-package com.gestaocash.servicesImpl;
+package com.gestaoCash.servicesImpl;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gestaocash.model.Revenue;
-import com.gestaocash.repositories.RevenueRepository;
-import com.gestaocash.services.RevenueService;
+import com.gestaoCash.model.Revenue;
+import com.gestaoCash.repositories.RevenueRepository;
+import com.gestaoCash.services.RevenueService;
 
 import jakarta.persistence.EntityNotFoundException;
 

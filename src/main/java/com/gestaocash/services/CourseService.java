@@ -1,8 +1,8 @@
-package com.gestaocash.services;
+package com.gestaoCash.services;
 
 import java.util.List;
 
-import com.gestaocash.model.Course;
+import com.gestaoCash.model.Course;
 
 public interface CourseService {
   void saveCourse(Course course);

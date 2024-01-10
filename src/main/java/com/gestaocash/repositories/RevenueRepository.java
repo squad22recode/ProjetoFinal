@@ -1,4 +1,4 @@
-package com.gestaocash.repositories;
+package com.gestaoCash.repositories;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.gestaocash.model.Revenue;
+import com.gestaoCash.model.Revenue;
 
 @Repository
 public interface RevenueRepository extends JpaRepository<Revenue, Long> {

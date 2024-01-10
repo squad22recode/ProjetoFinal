@@ -1,9 +1,9 @@
-package com.gestaocash.repositories;
+package com.gestaoCash.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.gestaocash.model.Course;
+import com.gestaoCash.model.Course;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {

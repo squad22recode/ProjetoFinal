@@ -1,16 +1,17 @@
-package com.gestaocash.model;
+package com.gestaoCash.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ import jakarta.persistence.Table;
 @Table
 @Entity(name = "usuarios")
 public class Users {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -212,4 +214,5 @@ public class Users {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

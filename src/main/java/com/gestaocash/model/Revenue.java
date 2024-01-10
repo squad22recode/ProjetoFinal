@@ -1,4 +1,4 @@
-package com.gestaocash.model;
+package com.gestaoCash.model;
 
 import java.time.LocalDate;
 
@@ -18,6 +18,7 @@ import jakarta.persistence.ForeignKey;
 @Table
 @Entity(name = "receita_usuario")
 public class Revenue {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -86,4 +87,5 @@ public class Revenue {
 
 	@Column(columnDefinition = "DECIMAL(10,2)")
 	private Double valor;
+
 }

@@ -1,8 +1,8 @@
-package com.gestaocash.services;
+package com.gestaoCash.services;
 
 import java.util.List;
 
-import com.gestaocash.model.Client;
+import com.gestaoCash.model.Client;
 
 public interface ClientService {
   void saveClient(Client client);

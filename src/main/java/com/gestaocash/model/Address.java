@@ -1,4 +1,4 @@
-package com.gestaocash.model;
+package com.gestaoCash.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -102,4 +102,5 @@ public class Address {
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}
+
 }
