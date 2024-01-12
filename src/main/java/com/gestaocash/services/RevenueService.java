@@ -8,6 +8,7 @@ public interface RevenueService {
   void saveRevenue(Revenue revenue);
 
   List<Revenue> findAllRevenues();
+  List<Revenue> findRevenueAndUser(Long id);
 
   Revenue findRevenueById(Long id);
   

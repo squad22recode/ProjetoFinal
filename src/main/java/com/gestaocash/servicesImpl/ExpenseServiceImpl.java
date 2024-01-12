@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gestaoCash.model.Expense;
+import com.gestaoCash.model.Revenue;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.services.ExpenseService;
 
@@ -41,8 +42,16 @@ public class ExpenseServiceImpl implements ExpenseService {
       throw new EntityNotFoundException();
     }
   }
-
+  
+  
+@Transactional
   @Override
+public List<Expense> findExpenseAndUser(Long id) {
+	
+	return expenseRespository.findExpenseAndUser(id);
+}
+
+@Override
   public void updateExpenseById(Long id, Expense updatedExpense) {
     this.expenseRespository.save(updatedExpense);
   }

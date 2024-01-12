@@ -143,6 +143,7 @@ public class UsersController {
 	@GetMapping("/area-cliente")
 	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
+		
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		
@@ -156,17 +157,18 @@ public class UsersController {
 		model.addAttribute("img", img);
 		
 		//List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId()); 
-	
-		List<Revenue> revenues = revRepo.findAll();		
-				
-		List<Expense> exps = expRepo.findAll();
 		
-		model.addAttribute("exps",exps);
+		List<Revenue> revenues = revenueService.findRevenueAndUser((long) 24);		
+				
+		List<Expense> expenses = expenseService.findExpenseAndUser((long) 24);
+		
+		model.addAttribute("exps",expenses);
 		model.addAttribute("revs", revenues);
-;		return modelAndView;
+		return modelAndView;
 	}
+	
 
-	@PostMapping("/area-cliente")
+	@PostMapping("/area-cliente/receita")
 	public String addRevenue(@ModelAttribute("revenue") Revenue revenue) {
 
 		Users user = new Users();

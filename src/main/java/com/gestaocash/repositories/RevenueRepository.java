@@ -11,7 +11,12 @@ import com.gestaoCash.model.Revenue;
 
 @Repository
 public interface RevenueRepository extends JpaRepository<Revenue, Long> {
-
-//	  @Query("select a.id, a.data, a.observacao, a.categoria, a.valor from despesa_usuario a inner join a.usuario b where b.id = :id " )
-//	    List<Revenue> findRevenueByUser(@Param("id") Long id);
+	
+	
+	@Query(nativeQuery= true,
+			value = "SELECT DISTINCT r.*"
+			+ " FROM receita_usuario as r"
+			+ " INNER JOIN usuarios as u"
+			+ " ON r.usuario_id = :id")
+	List<Revenue> findRevenueAndUser(@Param("id") Long id);
 }

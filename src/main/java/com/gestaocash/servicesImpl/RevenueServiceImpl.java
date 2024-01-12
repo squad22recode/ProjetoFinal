@@ -15,10 +15,18 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class RevenueServiceImpl implements RevenueService {
 
-  @Autowired
+
+@Autowired
   private RevenueRepository revenueRepository;
 
+@Override
+@Transactional(readOnly = true)
+  public List<Revenue> findRevenueAndUser(Long id) {
+	  
+	  return revenueRepository.findRevenueAndUser(id);
+  }
   @Override
+  
   public void saveRevenue(Revenue revenue) {
     this.revenueRepository.save(revenue);
   }
