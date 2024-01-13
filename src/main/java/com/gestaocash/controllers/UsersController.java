@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import javax.swing.ImageIcon;
 
+import org.apache.catalina.mapper.Mapper;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -41,6 +42,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.gestaoCash.enums.CategoryEnum;
 import com.gestaoCash.enums.StateEnum;
 import com.gestaoCash.model.Address;
 import com.gestaoCash.model.Expense;
@@ -141,7 +147,7 @@ public class UsersController {
 	}
 
 	@GetMapping("/area-cliente")
-	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue) {
+	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue) throws JsonProcessingException {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		
 		modelAndView.addObject("expense", new Expense());
@@ -158,10 +164,21 @@ public class UsersController {
 		
 		//List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId()); 
 		
-		List<Revenue> revenues = revenueService.findRevenueAndUser((long) 24);		
-				
-		List<Expense> expenses = expenseService.findExpenseAndUser((long) 24);
+		List<Revenue> revenues = revenueService.findRevenueAndUser(id);				
+		List<Expense> expenses = expenseService.findExpenseAndUser(id);
 		
+		CategoryEnum[] cats = CategoryEnum.values();
+		
+//		ObjectMapper mapper = new ObjectMapper();
+//		String reve = mapper.writeValueAsString(revenues);
+		 List<String> expe = new ArrayList<>();
+		 for(Expense e : expenses) {
+			expe.add(e.toString());
+		}
+		
+		 
+		model.addAttribute("cats", cats);
+		model.addAttribute("expsString",expe);
 		model.addAttribute("exps",expenses);
 		model.addAttribute("revs", revenues);
 		return modelAndView;

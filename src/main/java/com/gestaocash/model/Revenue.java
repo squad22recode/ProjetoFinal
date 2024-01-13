@@ -88,4 +88,10 @@ public class Revenue {
 	@Column(columnDefinition = "DECIMAL(10,2)")
 	private Double valor;
 
+	@Override
+	public String toString() {
+		return "id:" +id + ",usuario:" + usuario.getId() + ",categoria:" + categoria + ",observacao:" + observacao
+				+ ",data:" + data + ",valor:" + valor;
+	}
+
 }

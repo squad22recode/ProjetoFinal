@@ -45,7 +45,7 @@ public void setCategoria(String categoria) {
 @DateTimeFormat(iso = ISO.DATE)
   private LocalDate data;
 
-  private String observacao;
+  private String descricao;
 
   @Column(columnDefinition = "DECIMAL(10,2)")
   private Double valor;
@@ -76,12 +76,12 @@ public void setCategoria(String categoria) {
     this.data = data;
   }
 
-  public String getObservacao() {
-    return observacao;
+  public String getDescricao() {
+    return descricao;
   }
 
-  public void setObservacao(String observacao) {
-    this.observacao = observacao;
+  public void setDescricao(String descricao) {
+    this.descricao = descricao;
   }
 
   public Double getValor() {
@@ -92,4 +92,11 @@ public void setCategoria(String categoria) {
     this.valor = valor;
   }
 
+@Override
+public String toString() {
+	return "id:" + id + ",usuario:" + usuario.getId() + ",categoria:" + categoria + ",data:" + data
+			+ ",descricao:" + descricao + ",valor:" + valor;
+}
+
+  
 }

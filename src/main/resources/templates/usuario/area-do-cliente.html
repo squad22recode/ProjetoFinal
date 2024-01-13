@@ -18,7 +18,7 @@
 		href="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png"
 		type="image/x-icon">
 	<!-- imposts vendor bootstrap -->
-	 <link rel="stylesheet" href="/assets/vendor/boxicons/css/boxicons.min.css">
+	<link rel="stylesheet" href="/assets/vendor/boxicons/css/boxicons.min.css">
 	<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
 	<link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
 	<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -35,13 +35,13 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
 
 	<!-- import cript gráficos -->
-	
+
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 </head>
 
 <body>
 	<!-- Inicio header -->
-	<div th:replace="fragments/header :: header"></div>
+	<div th:replace="~{fragments/header :: header}"></div>
 	<!-- fim header -->
 
 	<section class="section profile container">
@@ -125,7 +125,7 @@
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary"
-													data-bs-dismiss="modal">Close</button>
+													data-bs-dismiss="modal">Fechar</button>
 											</div>
 										</div>
 									</div>
@@ -145,7 +145,7 @@
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary"
-													data-bs-dismiss="modal">Close</button>
+													data-bs-dismiss="modal">Fechar</button>
 											</div>
 										</div>
 									</div>
@@ -195,19 +195,20 @@
 																		<th scope="col">Dia</th>
 																		<th scope="col">Categoria</th>
 																		<th scope="col">Valor</th>
-																		<th scope="col">Fixas / Variaveis</th>
-																		<th scope="col">Observação</th>
+																		<th scope="col">Descricao</th>
+
 
 																	</tr>
 																</thead>
 																<tbody>
 																	<tr th:each="exp: ${exps}">
 
-																		<td>05</td>
+																		<td th:text="${#temporals.day(exp.getData())}">
+																		</td>
 																		<td th:text="${exp.getCategoria()}"></td>
-																		<td th:text="${exp.getValor()}"></td>
-																		<td>Fixa</td>
-																		<td th:text="${exp.getObservacao()}"></td>
+																		<td th:text="${#numbers.formatCurrency(exp.getValor())}"></td>
+																		<td th:text="${exp.getDescricao()}"></td>
+
 																	</tr>
 
 																</tbody>
@@ -216,27 +217,46 @@
 															<!-- gráfico de pizza-->
 															<canvas id="pieChart" class="my-5"
 																style="max-height: 400px;"></canvas>
-															<script>
+															<script th:inline="javascript">
+
+																/*<![CDATA[*/
+
+
+																var expString = /*[[${expsString}]]*/ null;
+																
+																//colocando a string de uma forma que possa fazer um json parse
+																const exps = expString.map(ele => `{"${ele.split(',').join('","')}"}`);
+																//transformando o array de string em objeto json iteravel
+																const exps2 = exps.map(ele => JSON.parse(ele.split(':').join('":"')));
+																
+																//calculando os valores para uma mesma categoria
+																
+																const expensesCount = exps2.map(exp => {
+																	let valor = 0;
+																	let categoria;
+
+																	const expFilter = exps2.filter((expFilter, index) =>
+																		expFilter.categoria == exp.categoria
+																	)
+
+																	return {categoria: exp.categoria, valor: expFilter.reduce((acum, ele)=> acum + Number(ele.valor),0)};
+
+																})
+																const valueCat  = (expensesCount.map(e => JSON.stringify(e))
+    .reduce((acc, cur) => (acc.includes(cur) || acc.push(cur), acc), [])
+    .map(e => JSON.parse(e)));
+
 																document.addEventListener("DOMContentLoaded", () => {
 																	new Chart(document.querySelector('#pieChart'), {
 																		type: 'pie',
 																		data: {
-																			labels: [
-																				'Fixas',
-																				'Cartão de crédito',
-																				'Alimentação',
-																				'Lazer  ',
-																				'Transporte'
-																			],
+																			labels: valueCat.map(exp => exp.categoria),
 																			datasets: [{
 																				label: 'Gráfico de despesas',
-																				data: [399.90, 208.90, 15.90, 100.00, 50.00,],
+																				data: valueCat.map(exp => exp.valor),
 																				backgroundColor: [
-																					'rgb(255, 99, 132)',
-																					'rgb(54, 162, 235)',
-																					'rgb(255, 205, 86)',
-																					'rgb(105,89,205)',
-																					'#228B22',
+																					'#5b1d99','#0074b4','#00b34c','#ffd41f','#fc6e3d',
+																					'#000000','#657275', '#af162a','#032dc6'
 
 																				],
 																				hoverOffset: 4
@@ -244,6 +264,7 @@
 																		}
 																	});
 																});
+																/*]]>*/
 															</script>
 
 															<div class="pagetitle ">
@@ -264,7 +285,8 @@
 																</thead>
 																<tbody>
 																	<tr th:each="rev: ${revs}">
-																		<td th:text="${#temporals.day(rev.getData())}"></td>
+																		<td th:text="${#temporals.day(rev.getData())}">
+																		</td>
 																		<td th:text="${rev.getCategoria()}"></td>
 																		<td th:text="${rev.getValor()}"></td>
 																		<td th:text="${rev.getObservacao()}"></td>
@@ -1245,7 +1267,7 @@
 	</div>
 
 	</section>
-	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="~{fragments/footer :: footer}"></div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -1306,6 +1328,29 @@
 				}
 			}).render();
 		});
+	</script>
+	
+	<!-- adicionar uma nova option em um select q for selecionado outros -->
+	<script th:inline="javascript">
+		const option = document.getElementById("option");
+		const outros = document.getElementById("outros");
+		const select = document.getElementById("select");
+		
+		
+		function selecionado(event){
+			if(event.target.value == "Outros"){
+				outros.classList.remove('d-none');
+				outros.classList.add('d-block');
+			}else{
+				outros.classList.add('d-none');
+				outros.classList.remove('d-block');
+			}
+		}
+		
+		function addCategory(event){
+			$('select').append('<option value='+event.target.value+' selected>' + event.target.value + '</option>');		
+		}
+		
 	</script>
 </body>
 
