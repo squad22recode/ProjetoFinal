@@ -1,6 +1,8 @@
 package com.gestaoCash.servicesImpl;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,4 +61,12 @@ public class RevenueServiceImpl implements RevenueService {
   public void deleteRevenueById(Long id) {
     this.revenueRepository.deleteById(id);
   }
+  
+@Override
+public Stream<Revenue> findRevenueFilterDate(LocalDate date, Long id) {
+	return this.findRevenueAndUser(id).stream().filter(revenue -> revenue.getData().getMonth().equals(date.getMonth()));
+	
+}
+  
+  
 }

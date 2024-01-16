@@ -2,56 +2,41 @@ package com.gestaoCash.controllers;
 
 import java.awt.Image;
 import java.io.IOException;
-import java.nio.file.attribute.UserPrincipal;
-import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
+
 
 import javax.swing.ImageIcon;
-
-import org.apache.catalina.mapper.Mapper;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.support.Repositories;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.gestaoCash.enums.CategoryEnum;
+import com.gestaoCash.enums.MonthEnum;
 import com.gestaoCash.enums.StateEnum;
 import com.gestaoCash.model.Address;
 import com.gestaoCash.model.Expense;
 import com.gestaoCash.model.Revenue;
-import com.gestaoCash.model.UserDetailsImpl;
 import com.gestaoCash.model.Users;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.repositories.RevenueRepository;
@@ -62,6 +47,8 @@ import com.gestaoCash.services.UserService;
 import com.gestaoCash.utils.DataUserAuth;
 import com.gestaoCash.utils.SenhaUtils;
 
+import jakarta.websocket.server.PathParam;
+
 @Controller
 @RequestMapping("/usuario")
 public class UsersController {
@@ -71,10 +58,10 @@ public class UsersController {
 
 	@Autowired
 	UserRepository userepo;
-	
+
 	@Autowired
 	ExpenseRespository expRepo;
-	
+
 	@Autowired
 	private RevenueRepository revRepo;
 
@@ -85,6 +72,9 @@ public class UsersController {
 	private RevenueService revenueService;
 
 	DataUserAuth data = new DataUserAuth();
+	
+LocalDate parameterRev;
+LocalDate parameterExp;
 
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
@@ -147,9 +137,9 @@ public class UsersController {
 	}
 
 	@GetMapping("/area-cliente")
-	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue) throws JsonProcessingException {
+	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue,@RequestParam(required=false, name="date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
-		
+
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		
@@ -161,30 +151,56 @@ public class UsersController {
 		model.addAttribute("getUser", getUser);
 		Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
 		model.addAttribute("img", img);
+
+		// List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId());
 		
-		//List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId()); 
-		
-		List<Revenue> revenues = revenueService.findRevenueAndUser(id);				
+		//List<Revenue> revenues = revenueService.findRevenueAndUser(id);
 		List<Expense> expenses = expenseService.findExpenseAndUser(id);
-		
+
 		CategoryEnum[] cats = CategoryEnum.values();
+		MonthEnum[] months = MonthEnum.values();
 		
+		Stream<Revenue> revenues;
+		Stream<Expense> expensesF;
+		
+		if(dateMonth != null) {
+			Locale local = new Locale("pt","BR");
+			DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MMMM-yyyy",local);
+			
+			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-"+dateMonth,formato), id);	
+			expensesF = expenseService.findExpenseFilterDate(LocalDate.parse("01-"+dateMonth,formato), id);	
+		}else {
+			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id);
+			expensesF = expenseService.findExpenseFilterDate(LocalDate.now(), id);	
+		}
+
 //		ObjectMapper mapper = new ObjectMapper();
 //		String reve = mapper.writeValueAsString(revenues);
-		 List<String> expe = new ArrayList<>();
-		 for(Expense e : expenses) {
+		List<String> expe = new ArrayList<>();
+		for (Expense e : expenses) {
 			expe.add(e.toString());
 		}
 		
-		 
+//		Locale local = new Locale("pt","BR");
+//		DateFormat formato = new SimpleDateFormat("MMMM yyyy",local);
+		Set<LocalDate> data = new HashSet<>();
+		
+		for (Expense e : expenses) {
+			data.add(e.getData());
+		}
+		
+		
+		model.addAttribute("data", data);
+		model.addAttribute("months", months);
 		model.addAttribute("cats", cats);
-		model.addAttribute("expsString",expe);
-		model.addAttribute("exps",expenses);
+		model.addAttribute("expsString", expe);
+		model.addAttribute("exps", expensesF);
 		model.addAttribute("revs", revenues);
+		model.addAttribute("dateMonth", dateMonth);
 		return modelAndView;
 	}
 	
-
+	
 	@PostMapping("/area-cliente/receita")
 	public String addRevenue(@ModelAttribute("revenue") Revenue revenue) {
 

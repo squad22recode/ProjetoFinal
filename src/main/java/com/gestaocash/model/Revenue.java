@@ -26,11 +26,13 @@ public class Revenue {
 	@JoinColumn(foreignKey = @ForeignKey(name = "usuario_id"))
 	@ManyToOne
 	private Users usuario;
-
-	@Column(columnDefinition = "VARCHAR(100)")
-	private String categoria;
+	
+	private String descricao;
 	
 	private String observacao;
+	
+	@Column(columnDefinition = "DECIMAL(10,2)")
+	private Double valor;
 
 	public String getObservacao() {
 		return observacao;
@@ -40,13 +42,6 @@ public class Revenue {
 		this.observacao = observacao;
 	}
 
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
 
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate data;
@@ -85,13 +80,14 @@ public class Revenue {
 		this.valor = valor;
 	}
 
-	@Column(columnDefinition = "DECIMAL(10,2)")
-	private Double valor;
-
-	@Override
-	public String toString() {
-		return "id:" +id + ",usuario:" + usuario.getId() + ",categoria:" + categoria + ",observacao:" + observacao
-				+ ",data:" + data + ",valor:" + valor;
+	public String getDescricao() {
+		return descricao;
 	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	
 
 }

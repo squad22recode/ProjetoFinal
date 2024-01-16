@@ -1,6 +1,8 @@
 package com.gestaoCash.servicesImpl;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,4 +62,11 @@ public List<Expense> findExpenseAndUser(Long id) {
   public void deleteExpenseById(Long id) {
     this.expenseRespository.deleteById(id);
   }
+
+@Override
+public Stream<Expense> findExpenseFilterDate(LocalDate date, Long id) {
+	return this.findExpenseAndUser(id).stream().filter(revenue -> revenue.getData().getMonth() == date.getMonth() && revenue.getData().getYear() == date.getYear() );
+}
+  
+  
 }

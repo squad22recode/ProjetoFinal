@@ -1,6 +1,8 @@
 package com.gestaoCash.services;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.gestaoCash.model.Revenue;
 
@@ -9,6 +11,7 @@ public interface RevenueService {
 
   List<Revenue> findAllRevenues();
   List<Revenue> findRevenueAndUser(Long id);
+  Stream<Revenue> findRevenueFilterDate(LocalDate date, Long id);
 
   Revenue findRevenueById(Long id);
   

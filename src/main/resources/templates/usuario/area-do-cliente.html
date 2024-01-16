@@ -1,43 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<head th:replace="~{fragments/head :: head}">
-	<!-- <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- import booststrap -->
-	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-	-->
-	<title>GestãoCash | Área do Cliente</title>
+
+
+<head th:replace="~{fragments/head :: head (title='GestãoCash | Área do Cliente')}">
+
 	<!-- imports css -->
-	<!-- <link rel="stylesheet" href="/assets/styles/area-cliente-style.css">
-	<link rel="stylesheet" href="/assets/styles/style.css">
-	<link rel="stylesheet" href="/assets/styles/header-footer.css">
 
-	<link rel="shortcut icon"
-		href="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png"
-		type="image/x-icon">
-	<!-- imposts vendor bootstrap -->
-	<link rel="stylesheet" href="/assets/vendor/boxicons/css/boxicons.min.css">
-	<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
-	<link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-	<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/assets/styles/style.css" rel="stylesheet">
-	<link href="/assets/vendor/quill/quill.snow.css" rel="stylesheet">
-	<link href="/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-	<link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
-	<!-- import google fonts -->
-	<!-- <link
-		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap"
-		rel="stylesheet">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
-
-	<!-- import cript gráficos -->
-
-	<script src="https://code.highcharts.com/highcharts.js"></script>
 </head>
+
+
 
 <body>
 	<!-- Inicio header -->
@@ -159,61 +131,60 @@
 													<div class="card recent-sales overflow-auto">
 
 														<div class="filter">
-															<a class="icon" href="#" data-bs-toggle="dropdown"><i
-																	class="bi bi-three-dots"></i></a>
+															<button class="icon btn border-0" href="#"
+																data-bs-toggle="dropdown"><i
+																	class="bi bi-three-dots"></i></button>
 															<ul
 																class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
 
-																<li><a class="dropdown-item" href="#">Janeiro</a></li>
-																<li><a class="dropdown-item" href="#">Fevereiro</a>
+																<li th:each="date: ${data}" class="dropdown-item">
+																	<a th:href="@{/usuario/area-cliente(date=${#temporals.monthName(date)}+'-'+${#temporals.year(date)})}"
+																		th:text="${#temporals.monthName(date)}+' '+${#temporals.year(date)}">
+																	</a>
 																</li>
-																<li><a class="dropdown-item" href="#">Março</a></li>
-																<li><a class="dropdown-item" href="#">Abril</a></li>
-																<li><a class="dropdown-item" href="#">Maio</a></li>
-																<li><a class="dropdown-item" href="#">Junho</a></li>
-																<li><a class="dropdown-item" href="#">Julho</a></li>
-																<li><a class="dropdown-item" href="#">Agosto</a></li>
-																<li><a class="dropdown-item" href="#">Setembro</a></li>
-																<li><a class="dropdown-item" href="#">Outubro</a></li>
-																<li><a class="dropdown-item" href="#">Novembro</a></li>
-																<li><a class="dropdown-item" href="#">Dezembro</a></li>
+
 															</ul>
 														</div>
-
+														<!-- <p th:each="exp: ${data}" th:text="${#temporals.monthName(exp)}+' '+${#temporals.year(exp)}"></p> -->
+														<p th:if="date != null" th:text="${date}"><strong></strong></p>
 														<div class="card-body">
-															<h5 class="card-title">Controle financeiro <span>|
-																	Fevereiro 2023</span>
+															<h5 class="card-title">Controle financeiro
+																<span>| Fevereiro 2023</span>
 															</h5>
 															<div class="pagetitle">
 																<p>Despesas:</p>
 															</div>
+															<div
+																class="rounded border border-opacity-50 border-bottom-0">
+																<table class="table">
+																	<thead class="table-primary">
+																		<tr>
+																			<th scope="col">Dia</th>
+																			<th scope="col">Categoria</th>
+																			<th scope="col">Valor</th>
+																			<th scope="col">Descricao</th>
 
-															<table class="table table-borderless datatable">
-																<thead>
-																	<tr>
-																		<th scope="col">Dia</th>
-																		<th scope="col">Categoria</th>
-																		<th scope="col">Valor</th>
-																		<th scope="col">Descricao</th>
 
+																		</tr>
+																	</thead>
+																	<tbody class="table-group-divider">
+																		<tr th:each="exp: ${exps}">
 
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr th:each="exp: ${exps}">
+																			<td
+																				th:text="${#temporals.day(exp.getData())}">
+																			</td>
+																			<td th:text="${exp.getCategoria()}"></td>
+																			<td
+																				th:text="${#numbers.formatCurrency(exp.getValor())}">
+																			</td>
+																			<td th:text="${exp.getDescricao()}"></td>
 
-																		<td th:text="${#temporals.day(exp.getData())}">
-																		</td>
-																		<td th:text="${exp.getCategoria()}"></td>
-																		<td th:text="${#numbers.formatCurrency(exp.getValor())}"></td>
-																		<td th:text="${exp.getDescricao()}"></td>
+																		</tr>
 
-																	</tr>
-
-																</tbody>
-															</table>
-
+																	</tbody>
+																</table>
+															</div>
 															<!-- gráfico de pizza-->
 															<canvas id="pieChart" class="my-5"
 																style="max-height: 400px;"></canvas>
@@ -221,16 +192,33 @@
 
 																/*<![CDATA[*/
 
-
+																//const dateEnum = /*[[${months}]]*/ null;
 																var expString = /*[[${expsString}]]*/ null;
-																
+																const date = /*[[${dateMonth}]]*/ null;
+																console.log(date);
+
 																//colocando a string de uma forma que possa fazer um json parse
 																const exps = expString.map(ele => `{"${ele.split(',').join('","')}"}`);
 																//transformando o array de string em objeto json iteravel
 																const exps2 = exps.map(ele => JSON.parse(ele.split(':').join('":"')));
-																
+
+																function filterMonth(event) {
+																	let dataFilters = [];
+
+																	exps2.forEach((exp, index) => {
+																		if (new Date(exp.data).getFullYear() === new Date().getFullYear()) {
+																			// if(dateEnum[new Date(exp.data).getUTCMonth()] == event.target.innerText){
+																			//		 dataFilters.push(exp);
+																			// }
+																		}
+
+																	})
+
+																}
+
+
 																//calculando os valores para uma mesma categoria
-																
+
 																const expensesCount = exps2.map(exp => {
 																	let valor = 0;
 																	let categoria;
@@ -239,12 +227,12 @@
 																		expFilter.categoria == exp.categoria
 																	)
 
-																	return {categoria: exp.categoria, valor: expFilter.reduce((acum, ele)=> acum + Number(ele.valor),0)};
+																	return {categoria: exp.categoria, valor: expFilter.reduce((acum, ele) => acum + Number(ele.valor), 0)};
 
 																})
-																const valueCat  = (expensesCount.map(e => JSON.stringify(e))
-    .reduce((acc, cur) => (acc.includes(cur) || acc.push(cur), acc), [])
-    .map(e => JSON.parse(e)));
+																const valueCat = (expensesCount.map(e => JSON.stringify(e))
+																	.reduce((acc, cur) => (acc.includes(cur) || acc.push(cur), acc), [])
+																	.map(e => JSON.parse(e)));
 
 																document.addEventListener("DOMContentLoaded", () => {
 																	new Chart(document.querySelector('#pieChart'), {
@@ -255,8 +243,8 @@
 																				label: 'Gráfico de despesas',
 																				data: valueCat.map(exp => exp.valor),
 																				backgroundColor: [
-																					'#5b1d99','#0074b4','#00b34c','#ffd41f','#fc6e3d',
-																					'#000000','#657275', '#af162a','#032dc6'
+																					'#5b1d99', '#0074b4', '#00b34c', '#ffd41f', '#fc6e3d',
+																					'#000000', '#657275', '#af162a', '#032dc6'
 
 																				],
 																				hoverOffset: 4
@@ -271,28 +259,32 @@
 																<p>Ontras fontes de receita (Lembrando que sua empresa
 																	faturou R$ 380,00 no mês anterior):</p>
 															</div>
+															<div
+																class="rounded border border-opacity-50 border-bottom-0">
 
-															<table class="table table-borderless datatable">
-																<thead>
-																	<tr>
-																		<th scope="col">Dia</th>
-																		<th scope="col">Categoria</th>
-																		<th scope="col">Valor</th>
-																		<th scope="col">Observação</th>
+																<table class="table ">
+																	<thead class="table-primary">
+																		<tr>
+																			<th scope="col">Dia</th>
+																			<th scope="col">Valor</th>
+																			<th scope="col">Descrição</th>
+																		</tr>
+																	</thead>
+																	<tbody class="table-group-divider">
+																		<tr th:each="rev: ${revs}">
+																			<td scope="col"
+																				th:text="${#temporals.day(rev.getData())}">
+																			</td>
 
-
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr th:each="rev: ${revs}">
-																		<td th:text="${#temporals.day(rev.getData())}">
-																		</td>
-																		<td th:text="${rev.getCategoria()}"></td>
-																		<td th:text="${rev.getValor()}"></td>
-																		<td th:text="${rev.getObservacao()}"></td>
-																	</tr>
-																</tbody>
-															</table>
+																			<td scope="col"
+																				th:text="${#numbers.formatCurrency(rev.getValor())}">
+																			</td>
+																			<td scope="col"
+																				th:text="${rev.getDescricao()}"></td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
 
 															<div class="card p-2 overflow-auto alert alert-danger"
 																role="alert">
@@ -1269,9 +1261,7 @@
 	</section>
 	<div th:replace="~{fragments/footer :: footer}"></div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-		crossorigin="anonymous"></script>
+
 	<!-- script do Chart.js -->
 	<script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
 	<script src="/assets/vendor/chart.js/chart.umd.js"></script>
@@ -1329,28 +1319,27 @@
 			}).render();
 		});
 	</script>
-	
+
 	<!-- adicionar uma nova option em um select q for selecionado outros -->
 	<script th:inline="javascript">
 		const option = document.getElementById("option");
 		const outros = document.getElementById("outros");
 		const select = document.getElementById("select");
-		
-		
-		function selecionado(event){
-			if(event.target.value == "Outros"){
+
+
+		function selecionado(event) {
+			if (event.target.value == "Outros") {
 				outros.classList.remove('d-none');
 				outros.classList.add('d-block');
-			}else{
+			} else {
 				outros.classList.add('d-none');
 				outros.classList.remove('d-block');
 			}
 		}
-		
-		function addCategory(event){
-			$('select').append('<option value='+event.target.value+' selected>' + event.target.value + '</option>');		
+
+		function addCategory(event) {
+			$('select').append('<option value=' + event.target.value + ' selected>' + event.target.value + '</option>');
 		}
-		
 	</script>
 </body>
 

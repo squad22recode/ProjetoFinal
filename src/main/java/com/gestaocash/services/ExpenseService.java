@@ -1,6 +1,8 @@
 package com.gestaoCash.services;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.data.repository.query.Param;
 
@@ -11,6 +13,7 @@ public interface ExpenseService {
   void saveExpense(Expense expense);
   
   List<Expense> findExpenseAndUser(Long id);
+  Stream<Expense> findExpenseFilterDate(LocalDate date, Long id);
 
   List<Expense> findAllExpense();
 
