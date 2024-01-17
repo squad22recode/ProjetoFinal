@@ -139,8 +139,8 @@
 
 
 																<li th:each="date: ${data}" class="dropdown-item">
-																	<a th:href="@{/usuario/area-cliente(date=${#temporals.monthName(date)}+'-'+${#temporals.year(date)})}"
-																		th:text="${#temporals.monthName(date)}+' '+${#temporals.year(date)}">
+																	<a class="linkMonth" th:href="@{/usuario/area-cliente(date=${date.toLowerCase()})}"
+																		th:text="${#strings.replace(date, '-', ' ')}">
 																	</a>
 																</li>
 
@@ -150,7 +150,7 @@
 														<p th:if="date != null" th:text="${date}"><strong></strong></p>
 														<div class="card-body">
 															<h5 class="card-title">Controle financeiro
-																<span>| Fevereiro 2023</span>
+																<span th:text="'| ' + ${dateMonth}"></span>
 															</h5>
 															<div class="pagetitle">
 																<p>Despesas:</p>
@@ -192,33 +192,17 @@
 
 																/*<![CDATA[*/
 
-																//const dateEnum = /*[[${months}]]*/ null;
+																
 																var expString = /*[[${expsString}]]*/ null;
-																const date = /*[[${dateMonth}]]*/ null;
-																console.log(date);
+																
 
 																//colocando a string de uma forma que possa fazer um json parse
 																const exps = expString.map(ele => `{"${ele.split(',').join('","')}"}`);
 																//transformando o array de string em objeto json iteravel
 																const exps2 = exps.map(ele => JSON.parse(ele.split(':').join('":"')));
 
-																function filterMonth(event) {
-																	let dataFilters = [];
-
-																	exps2.forEach((exp, index) => {
-																		if (new Date(exp.data).getFullYear() === new Date().getFullYear()) {
-																			// if(dateEnum[new Date(exp.data).getUTCMonth()] == event.target.innerText){
-																			//		 dataFilters.push(exp);
-																			// }
-																		}
-
-																	})
-
-																}
-
-
+																
 																//calculando os valores para uma mesma categoria
-
 																const expensesCount = exps2.map(exp => {
 																	let valor = 0;
 																	let categoria;
@@ -253,6 +237,7 @@
 																	});
 																});
 																/*]]>*/
+																
 															</script>
 
 															<div class="pagetitle ">

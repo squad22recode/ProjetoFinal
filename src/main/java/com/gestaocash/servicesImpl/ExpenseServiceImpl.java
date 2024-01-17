@@ -65,7 +65,7 @@ public List<Expense> findExpenseAndUser(Long id) {
 
 @Override
 public Stream<Expense> findExpenseFilterDate(LocalDate date, Long id) {
-	return this.findExpenseAndUser(id).stream().filter(revenue -> revenue.getData().getMonth() == date.getMonth() && revenue.getData().getYear() == date.getYear() );
+	return this.findExpenseAndUser(id).stream().filter(expense -> expense.getData().getMonth() == date.getMonth() && expense.getData().getYear() == date.getYear() );
 }
   
   

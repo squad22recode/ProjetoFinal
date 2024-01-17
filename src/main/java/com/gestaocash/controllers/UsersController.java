@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -155,25 +156,32 @@ LocalDate parameterExp;
 		// List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId());
 		
 		//List<Revenue> revenues = revenueService.findRevenueAndUser(id);
-		List<Expense> expenses = expenseService.findExpenseAndUser(id);
+//		List<Expense> expenses = expenseService.findExpenseAndUser(id);
 
 		CategoryEnum[] cats = CategoryEnum.values();
-		MonthEnum[] months = MonthEnum.values();
+		//MonthEnum[] months = MonthEnum.values();
 		
-		Stream<Revenue> revenues;
-		Stream<Expense> expensesF;
+		List<Revenue> revenues;
+		List<Expense> expenses;
+		
+		
+		
+		Locale local = new Locale("pt","BR");
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MMMM-yyyy",local);
+		DateTimeFormatter formatoDois = DateTimeFormatter.ofPattern("MMMM-yyyy",local);
 		
 		if(dateMonth != null) {
-			Locale local = new Locale("pt","BR");
-			DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MMMM-yyyy",local);
 			
-			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-"+dateMonth,formato), id);	
-			expensesF = expenseService.findExpenseFilterDate(LocalDate.parse("01-"+dateMonth,formato), id);	
+			
+			
+			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-"+dateMonth,formato), id).collect(Collectors.toList());	
+			expenses = expenseService.findExpenseFilterDate(LocalDate.parse("01-"+dateMonth,formato), id).collect(Collectors.toList());	
 		}else {
-			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id);
-			expensesF = expenseService.findExpenseFilterDate(LocalDate.now(), id);	
+			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id).collect(Collectors.toList());
+			expenses = expenseService.findExpenseFilterDate(LocalDate.now(), id).collect(Collectors.toList());	
 		}
-
+		
+		
 //		ObjectMapper mapper = new ObjectMapper();
 //		String reve = mapper.writeValueAsString(revenues);
 		List<String> expe = new ArrayList<>();
@@ -183,20 +191,29 @@ LocalDate parameterExp;
 		
 //		Locale local = new Locale("pt","BR");
 //		DateFormat formato = new SimpleDateFormat("MMMM yyyy",local);
-		Set<LocalDate> data = new HashSet<>();
+		Set<String> data = new HashSet<>();
 		
-		for (Expense e : expenses) {
-			data.add(e.getData());
+		if(expenseService.findExpenseAndUser(id).size() > revenueService.findRevenueAndUser(id).size()) {
+			for (Expense e : expenseService.findExpenseAndUser(id)) {
+				data.add(formatoDois.format(e.getData()).substring(0,1).toUpperCase().concat(formatoDois.format(e.getData()).substring(1)));
+			}	
+		}else {
+			
+			for (Revenue e : revenueService.findRevenueAndUser(id)) {
+				data.add(formatoDois.format(e.getData()).substring(0,1).toUpperCase().concat(formatoDois.format(e.getData()).substring(1)));
+			}	
 		}
 		
 		
+		
+		
 		model.addAttribute("data", data);
-		model.addAttribute("months", months);
+		//model.addAttribute("months", months);
 		model.addAttribute("cats", cats);
 		model.addAttribute("expsString", expe);
-		model.addAttribute("exps", expensesF);
+		model.addAttribute("exps", expenses);
 		model.addAttribute("revs", revenues);
-		model.addAttribute("dateMonth", dateMonth);
+		model.addAttribute("dateMonth", dateMonth != null ? dateMonth.substring(0,1).toUpperCase().concat(dateMonth.substring(1)).replace("-", " "): formatoDois.format(LocalDate.now()).substring(0,1).toUpperCase().concat(formatoDois.format(LocalDate.now()).substring(1)));
 		return modelAndView;
 	}
 	
