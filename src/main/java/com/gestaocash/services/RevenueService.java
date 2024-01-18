@@ -7,16 +7,19 @@ import java.util.stream.Stream;
 import com.gestaoCash.model.Revenue;
 
 public interface RevenueService {
-  void saveRevenue(Revenue revenue);
+	void saveRevenue(Revenue revenue);
 
-  List<Revenue> findAllRevenues();
-  List<Revenue> findRevenueAndUser(Long id);
-  Stream<Revenue> findRevenueFilterDate(LocalDate date, Long id);
+	List<Revenue> findAllRevenues();
 
-  Revenue findRevenueById(Long id);
-  
+	List<Revenue> findRevenueAndUser(Long id);
 
-  void updateRevenueById(Long id, Revenue updatedRevenue);
+	Stream<Revenue> findRevenueFilterDate(LocalDate date, Long id);
 
-  void deleteRevenueById(Long id);
+	String calcTotalMonth(List<Revenue> revenue, int ano);
+
+	Revenue findRevenueById(Long id);
+
+	void updateRevenueById(Long id, Revenue updatedRevenue);
+
+	void deleteRevenueById(Long id);
 }

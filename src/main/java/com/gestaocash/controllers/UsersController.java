@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gestaoCash.enums.CategoryEnum;
 import com.gestaoCash.enums.MonthEnum;
 import com.gestaoCash.enums.StateEnum;
@@ -159,7 +160,7 @@ LocalDate parameterExp;
 //		List<Expense> expenses = expenseService.findExpenseAndUser(id);
 
 		CategoryEnum[] cats = CategoryEnum.values();
-		//MonthEnum[] months = MonthEnum.values();
+		MonthEnum[] months = MonthEnum.values();
 		
 		List<Revenue> revenues;
 		List<Expense> expenses;
@@ -171,9 +172,6 @@ LocalDate parameterExp;
 		DateTimeFormatter formatoDois = DateTimeFormatter.ofPattern("MMMM-yyyy",local);
 		
 		if(dateMonth != null) {
-			
-			
-			
 			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-"+dateMonth,formato), id).collect(Collectors.toList());	
 			expenses = expenseService.findExpenseFilterDate(LocalDate.parse("01-"+dateMonth,formato), id).collect(Collectors.toList());	
 		}else {
@@ -204,11 +202,12 @@ LocalDate parameterExp;
 			}	
 		}
 		
-		
-		
+		String totalMonth = revenueService.calcTotalMonth(revenueService.findRevenueAndUser(id), LocalDate.now().getYear());
+	
 		
 		model.addAttribute("data", data);
-		//model.addAttribute("months", months);
+		model.addAttribute("totalMonth", totalMonth);
+		model.addAttribute("months", months);
 		model.addAttribute("cats", cats);
 		model.addAttribute("expsString", expe);
 		model.addAttribute("exps", expenses);

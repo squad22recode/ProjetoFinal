@@ -316,15 +316,33 @@
 									</div>
 								</div>
 								<canvas id="lineChart" style="max-height: 400px;"></canvas>
-								<script>
+								<script th:inline="javascript">
+									
+									/*<![CDATA[*/
+																var revTotalMonthString = /*[[${totalMonth}]]*/ null;
+																const months = /*[[${months}]]*/ null;
+									/*]]>*/
+									const revJson = JSON.parse(revTotalMonthString);
+									
+									let dateMonth = []
+									let valueMonth = []
+									const filterRev = revJson.forEach(rev=>{
+													if(rev.valor != "0.0"){
+														const date =  new Date(rev.data).getUTCMonth();
+														dateMonth.push(months[date]);
+														valueMonth.push(rev.valor)
+													}
+												});
+									
+									
 									document.addEventListener("DOMContentLoaded", () => {
 										new Chart(document.querySelector('#lineChart'), {
 											type: 'line',
 											data: {
-												labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
+												labels: dateMonth,
 												datasets: [{
-													label: 'Receita bruta anual',
-													data: [750.10, 840.40, 900.00, 850.90, 1100.00, 910.90, 779.00, 898.50],
+													label: 'Receita bruta anual R$',
+													data: valueMonth,
 													fill: false,
 													borderColor: '#04347c',
 													tension: 0.1
