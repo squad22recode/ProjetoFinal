@@ -75,6 +75,7 @@
                         id="inputImg"
                         name="inputImg"
                         />
+                    
                 </div>
                
                 <div class="col-md-4">
@@ -89,6 +90,7 @@
                     </select>
                 </div>
                 <div class="col-6">
+					<input type="hidden" name="idEndereco" th:value="${user.getEnderecoUsuario().getId()}" th:field="*{enderecoUsuario.id}"/>
                     <label for="inputAddress" class="form-label"
                         >Endereço</label
                     >

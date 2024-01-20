@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gestaoCash.model.Expense;
-import com.gestaoCash.model.Revenue;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.services.ExpenseService;
 

@@ -37,3 +37,23 @@ function zipMask(value){
   value = value.replace(/(\d{5})(\d)/,'$1-$2')
   return value
 }
+
+	const option = document.getElementById("option");
+		const outros = document.getElementById("outros");
+		const select = document.getElementById("select");
+
+
+		function selecionado(event) {
+			if (event.target.value == "Outros") {
+				outros.classList.remove('d-none');
+				outros.classList.add('d-block');
+			} else {
+				outros.classList.add('d-none');
+				outros.classList.remove('d-block');
+			}
+		}
+
+		function addCategory(event) {
+			$('select').append('<option value=' + event.target.value + ' selected>' + event.target.value + '</option>');
+		}
+

@@ -24,23 +24,11 @@ public class Expense {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // muitas despesas( essa classe) para um usuario (private Users usuario)
-  // @ManyToOne
-//  @ManyToOne(cascade = CascadeType.PERSIST)
-//  @JoinColumn(name = "usuario_id", referencedColumnName = "id")
   @JoinColumn(foreignKey = @ForeignKey(name = "usuario_id"))
   @ManyToOne
   private Users usuario;
 
   private String categoria;
-
-  public String getCategoria() {
-	return categoria;
-}
-
-public void setCategoria(String categoria) {
-	this.categoria = categoria;
-}
 
 @DateTimeFormat(iso = ISO.DATE)
   private LocalDate data;
@@ -57,6 +45,14 @@ public void setCategoria(String categoria) {
   public void setId(Long id) {
     this.id = id;
   }
+  
+  public String getCategoria() {
+	return categoria;
+}
+
+public void setCategoria(String categoria) {
+	this.categoria = categoria;
+}
 
   public Users getUsuario() {
     return usuario;

@@ -28,7 +28,7 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "endereco_id", referencedColumnName = "id")
 	private Address enderecoUsuario;
 

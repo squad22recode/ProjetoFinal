@@ -76,7 +76,6 @@ public class UsersController {
 	DataUserAuth data = new DataUserAuth();
 	
 LocalDate parameterRev;
-LocalDate parameterExp;
 
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
@@ -89,9 +88,9 @@ LocalDate parameterExp;
 
 	@GetMapping("/editar")
 	public String editUserView(Model model) {
-		Users user = new Users();
-		user = data.DataUser();
-		model.addAttribute("getUser", user);
+		Users userLog = new Users();
+		userLog = data.DataUser();
+		Users user = userService.findUserById(userLog.getId());
 		model.addAttribute("user", user);
 		model.addAttribute("states", StateEnum.values());
 		return "/usuario/editar";
@@ -134,7 +133,8 @@ LocalDate parameterExp;
 	@ResponseBody
 	public byte[] exibirImagen() {
 		Long id = data.DataUser().getId();
-		Users user = this.userepo.getReferenceById(id);
+//		Users user = this.userepo.getReferenceById(id);
+		Users user = userService.findUserById(id);
 		return user.getImagemPerfil();
 	}
 
@@ -151,8 +151,8 @@ LocalDate parameterExp;
 		Long id = getUser.getId();
 		modelAndView.addObject("user", userService.findUserById(id));
 		model.addAttribute("getUser", getUser);
-		Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
-		model.addAttribute("img", img);
+//		Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
+//		model.addAttribute("img", img);
 
 		// List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId());
 		
@@ -206,6 +206,8 @@ LocalDate parameterExp;
 		
 		double totalRevenue = revenueService.calcTotalRevenue(revenues);
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
+		
+		
 		model.addAttribute("totalRevenue",totalRevenue);
 		model.addAttribute("totalExpense",totalExpense);
 		model.addAttribute("data", data);
@@ -261,13 +263,11 @@ LocalDate parameterExp;
 	public String editUser(@ModelAttribute("user") Users editUser, @RequestParam("inputImg") MultipartFile file,
 			BindingResult result) throws IOException {
 
-		try {
-			if (file != null) {
-				editUser.setImagemPerfil(file.getBytes());
-			} else {
-
-				editUser.setImagemPerfil(data.DataUser().getImagemPerfil());
-			}
+		try {	if(file != null) {
+				editUser.setImagemPerfil(file.getBytes());}
+		else {
+			editUser.setImagemPerfil(data.DataUser().getImagemPerfil());
+		}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -277,11 +277,9 @@ LocalDate parameterExp;
 		String typeUser = data.DataUser().getTipoUsuario();
 		editUser.setId(id);
 		editUser.setSenha(password);
-		Address address = new Address();
-		address = data.DataUser().getEnderecoUsuario();
 		editUser.setTipoUsuario(typeUser);
-		editUser.setEnderecoUsuario(address);
-		userepo.saveAndFlush(editUser);
+		
+		userService.saveUser(editUser);
 		return "redirect:/usuario/area-cliente";
 	}
 }

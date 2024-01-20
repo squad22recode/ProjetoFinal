@@ -3,7 +3,7 @@
 
 <body>
 
-	<div th:fragment="add-expense">
+	<div th:fragment="add-expense">		
 		<form th:object="${expense}" th:action="@{/usuario/area-cliente/despesa}" method="post">
 
 			<div class="mb-3">
@@ -29,13 +29,13 @@
 
 			<div class="mb-3">
 				<label for="InputDescricao" class="form-label">Descrição</label>
-				<input type="text" class="form-control" id="InputData" th:field="*{descricao}">
+				<input type="text" class="form-control" id="InputData" th:field="*{descricao}" placeholder="mercado, água, lanche...">
 
 			</div>
 			<div class="mb-3">
 				<label for="InputValor" class="form-label">Valor</label>
 				<input type="number" required class="form-control" id="InputValor" th:field="*{valor}" step="0.01"
-					maxlength="10" placeholder="109.00">
+					maxlength="10" placeholder="Digite o valor">
 
 			</div>
 

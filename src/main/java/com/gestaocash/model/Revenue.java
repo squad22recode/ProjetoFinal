@@ -23,15 +23,16 @@ public class Revenue {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JoinColumn(foreignKey = @ForeignKey(name = "usuario_id"))
+	@JoinColumn(name="usuario_id", foreignKey = @ForeignKey(name = "FK_ID"))
 	@ManyToOne
 	private Users usuario;
 	
+	@Column(columnDefinition = "varchar(100)")
 	private String descricao;
 	
 	private String observacao;
 	
-	@Column(columnDefinition = "DECIMAL(10,2)")
+	@Column(columnDefinition = "DECIMAL(10,2)", nullable = false)
 	private Double valor;
 
 	public String getObservacao() {
@@ -44,6 +45,7 @@ public class Revenue {
 
 
 	@DateTimeFormat(iso = ISO.DATE)
+	@Column(nullable = false)
 	private LocalDate data;
 
 	public Long getId() {

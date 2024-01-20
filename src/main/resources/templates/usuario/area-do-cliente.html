@@ -24,7 +24,7 @@
 				<div class="card">
 					<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-						<img th:src="|/usuario/imagem/${getUser.id}|" alt="Profile" class="rounded-circle">
+						<img th:src="|/usuario/imagem/${getUser.getId()}|" alt="Profile" class="rounded-circle">
 						<h2 th:text="${getUser.getNome()}"></h2>
 						<h3>Produtos eletrônicos</h3>
 						<button type="button" class="btn btn-primary">
@@ -77,10 +77,6 @@
 							<section id="main" class="main">
 								<div class="pagetitle">
 									<h1>Pessoa Física</h1>
-									<span class="btn btn-primary" data-bs-toggle="modal"
-										data-bs-target="#modalReceita">Adicionar receita</span>
-									<span class="btn btn-danger" data-bs-toggle="modal"
-										data-bs-target="#modalDespesa">Adicionar despesa</span>
 								</div>
 								<!-- Modal-->
 
@@ -122,7 +118,6 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="section dashboard">
 									<div class="row">
 										<div class="col-lg-12">
@@ -139,7 +134,8 @@
 
 
 																<li th:each="date: ${data}" class="dropdown-item">
-																	<a class="linkMonth" th:href="@{/usuario/area-cliente(date=${date.toLowerCase()})}"
+																	<a class="linkMonth"
+																		th:href="@{/usuario/area-cliente(date=${date.toLowerCase()})}"
 																		th:text="${#strings.replace(date, '-', ' ')}">
 																	</a>
 																</li>
@@ -152,160 +148,261 @@
 															<h5 class="card-title">Controle financeiro
 																<span th:text="'| ' + ${dateMonth}"></span>
 															</h5>
+															<span class="btn btn-danger" data-bs-toggle="modal"
+										data-bs-target="#modalDespesa">Adicionar despesa</span>
 															<div class="pagetitle">
 																<p>Despesas:</p>
 															</div>
-															<div
-																class="rounded border border-opacity-50 border-bottom-0">
-																<table class="table">
-																	<thead class="table-primary">
-																		<tr>
-																			<th scope="col">Dia</th>
-																			<th scope="col">Categoria</th>
-																			<th scope="col">Valor</th>
-																			<th scope="col">Descricao</th>
+															
+															<div th:if="${exps.size()>0}">
+																<div
+																	class="rounded border border-opacity-50 border-bottom-0">
+																	<table
+																		th:class="${exps.size() > 0 ? 'table' : 'd-none'}">
+																		<thead class="table-primary">
+																			<tr>
+																				<th scope="col">Dia</th>
+																				<th scope="col">Categoria</th>
+																				<th scope="col">Valor</th>
+																				<th scope="col">Descricao</th>
+																				<th scope="col">Ações</th>
+
+																			</tr>
+																		</thead>
+																		<tbody class="table-group-divider">
+																			<tr th:each="exp: ${exps}">
+
+																				<td
+																					th:text="${#temporals.day(exp.getData())}">
+																				</td>
+																				<td th:text="${exp.getCategoria()}">
+																				</td>
+																				<td
+																					th:text="${#numbers.formatCurrency(exp.getValor())}">
+																				</td>
+																				<td th:text="${exp.getDescricao()}">
+																				</td>
+																				<td class="d-flex">
+																					<a th:href="@{/usuario/area-cliente/despesa/editar/{id} (id=${exp.getId()})}"
+																						class="border-0 bg-transparent">
+
+																						<h5 class="mb-0">
+																							<i
+																								class="bi bi-pencil text-info"></i>
+																						</h5>
+																					</a>
+																					<a onclick="return confirm('Tem certeza que deseja excluir o cliente?');"
+																						th:href="@{/usuario/area-cliente/despesa/delete/{id} (id=${exp.getId()})}"
+																						class="border-0 bg-transparent">
+																						<h5 class="mb-0"><i
+																								class="bi bi-x-lg text-danger"></i>
+																						</h5>
+																					</a>
+																				</td>
+																			</tr>
+
+																		</tbody>
+																	</table>
+																</div>
+																<!-- gráfico de pizza-->
+																<canvas id="pieChart" class="my-5"
+																	style="max-height: 400px;"></canvas>
+																<script th:inline="javascript">
+
+																	/*<![CDATA[*/
 
 
-																		</tr>
-																	</thead>
-																	<tbody class="table-group-divider">
-																		<tr th:each="exp: ${exps}">
+																	var expString = /*[[${expsString}]]*/ null;
 
-																			<td
-																				th:text="${#temporals.day(exp.getData())}">
-																			</td>
-																			<td th:text="${exp.getCategoria()}"></td>
-																			<td
-																				th:text="${#numbers.formatCurrency(exp.getValor())}">
-																			</td>
-																			<td th:text="${exp.getDescricao()}"></td>
 
-																		</tr>
+																	//colocando a string de uma forma que possa fazer um json parse
+																	const exps = expString.map(ele => `{"${ele.split(',').join('","')}"}`);
+																	//transformando o array de string em objeto json iteravel
+																	const exps2 = exps.map(ele => JSON.parse(ele.split(':').join('":"')));
 
-																	</tbody>
-																</table>
-															</div>
-															<!-- gráfico de pizza-->
-															<canvas id="pieChart" class="my-5"
-																style="max-height: 400px;"></canvas>
-															<script th:inline="javascript">
 
-																/*<![CDATA[*/
+																	//calculando os valores para uma mesma categoria
+																	const expensesCount = exps2.map(exp => {
+																		let valor = 0;
+																		let categoria;
 
-																
-																var expString = /*[[${expsString}]]*/ null;
-																
+																		const expFilter = exps2.filter((expFilter, index) =>
+																			expFilter.categoria == exp.categoria
+																		)
 
-																//colocando a string de uma forma que possa fazer um json parse
-																const exps = expString.map(ele => `{"${ele.split(',').join('","')}"}`);
-																//transformando o array de string em objeto json iteravel
-																const exps2 = exps.map(ele => JSON.parse(ele.split(':').join('":"')));
+																		return {categoria: exp.categoria, valor: expFilter.reduce((acum, ele) => acum + Number(ele.valor), 0)};
 
-																
-																//calculando os valores para uma mesma categoria
-																const expensesCount = exps2.map(exp => {
-																	let valor = 0;
-																	let categoria;
+																	})
+																	const valueCat = (expensesCount.map(e => JSON.stringify(e))
+																		.reduce((acc, cur) => (acc.includes(cur) || acc.push(cur), acc), [])
+																		.map(e => JSON.parse(e)));
 
-																	const expFilter = exps2.filter((expFilter, index) =>
-																		expFilter.categoria == exp.categoria
-																	)
+																	document.addEventListener("DOMContentLoaded", () => {
+																		new Chart(document.querySelector('#pieChart'), {
+																			type: 'pie',
+																			data: {
+																				labels: valueCat.map(exp => exp.categoria),
+																				datasets: [{
+																					label: 'Gráfico de despesas',
+																					data: valueCat.map(exp => exp.valor),
+																					backgroundColor: [
+																						'#5b1d99', '#0074b4', '#00b34c', '#ffd41f', '#fc6e3d',
+																						'#000000', '#657275', '#af162a', '#032dc6'
 
-																	return {categoria: exp.categoria, valor: expFilter.reduce((acum, ele) => acum + Number(ele.valor), 0)};
-
-																})
-																const valueCat = (expensesCount.map(e => JSON.stringify(e))
-																	.reduce((acc, cur) => (acc.includes(cur) || acc.push(cur), acc), [])
-																	.map(e => JSON.parse(e)));
-
-																document.addEventListener("DOMContentLoaded", () => {
-																	new Chart(document.querySelector('#pieChart'), {
-																		type: 'pie',
-																		data: {
-																			labels: valueCat.map(exp => exp.categoria),
-																			datasets: [{
-																				label: 'Gráfico de despesas',
-																				data: valueCat.map(exp => exp.valor),
-																				backgroundColor: [
-																					'#5b1d99', '#0074b4', '#00b34c', '#ffd41f', '#fc6e3d',
-																					'#000000', '#657275', '#af162a', '#032dc6'
-
-																				],
-																				hoverOffset: 4
-																			}]
-																		}
+																					],
+																					hoverOffset: 4
+																				}]
+																			}
+																		});
 																	});
-																});
 																/*]]>*/
-																
-															</script>
 
+																</script>
+															</div>
+															<h4 th:if="${exps.size() < 1}" class="alert alert-info">
+																Nenhuma despesa até então</h4>
 															<div class="pagetitle ">
+																<span class="btn btn-primary" data-bs-toggle="modal"
+										data-bs-target="#modalReceita">Adicionar receita</span>	
 																<p>Ontras fontes de receita (Lembrando que sua empresa
 																	faturou R$ 380,00 no mês anterior):</p>
 															</div>
-															<div
-																class="rounded border border-opacity-50 border-bottom-0">
+															<div th:if="${revs.size() > 0}">
 
-																<table class="table ">
-																	<thead class="table-primary">
-																		<tr>
-																			<th scope="col">Dia</th>
-																			<th scope="col">Valor</th>
-																			<th scope="col">Descrição</th>
-																		</tr>
-																	</thead>
-																	<tbody class="table-group-divider">
-																		<tr th:each="rev: ${revs}">
-																			<td scope="col"
-																				th:text="${#temporals.day(rev.getData())}">
-																			</td>
+																<div
+																	class="rounded border border-opacity-50 border-bottom-0">
 
-																			<td scope="col"
-																				th:text="${#numbers.formatCurrency(rev.getValor())}">
-																			</td>
-																			<td scope="col"
-																				th:text="${rev.getDescricao()}"></td>
-																		</tr>
-																	</tbody>
-																</table>
+																	<table class="table ">
+																		<thead class="table-primary">
+																			<tr>
+																				<th scope="col">Dia</th>
+																				<th scope="col">Valor</th>
+																				<th scope="col">Descrição</th>
+																				<th scope="col">Ações</th>
+																			</tr>
+																		</thead>
+																		<tbody class="table-group-divider">
+																			<tr th:each="rev: ${revs}">
+																				<td scope="col"
+																					th:text="${#temporals.day(rev.getData())}">
+																				</td>
+
+																				<td scope="col"
+																					th:text="${#numbers.formatCurrency(rev.getValor())}">
+																				</td>
+																				<td scope="col"
+																					th:text="${rev.getDescricao()}">
+																				</td>
+																				<td class="d-flex">
+																					<a th:href="@{/usuario/area-cliente/receita/editar/{id} (id=${rev.getId()})}"
+																						class="border-0 bg-transparent">
+
+																						<h5 class="mb-0">
+																							<i
+																								class="bi bi-pencil text-info"></i>
+																						</h5>
+																					</a>
+																					<a onclick="return confirm('Tem certeza que deseja excluir o cliente?');"
+																						th:href="@{/usuario/area-cliente/receita/delete/{id} (id=${rev.getId()})}"
+																						class="border-0 bg-transparent">
+																						<h5 class="mb-0"><i
+																								class="bi bi-x-lg text-danger"></i>
+																						</h5>
+																					</a>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+
+																<div th:class="${totalRevenue-totalExpense < 0} ? 'alert-danger card p-2 overflow-auto alert' : 'alert-info card p-2 overflow-auto alert'"
+																	role="alert">
+
+																	<table>
+																		<thead>
+																			<tr>
+																				<th>
+																					Receita Total Bruta:
+																				</th>
+																				<th>
+																					Despesa total:
+																				</th>
+																				<th>
+																					Receita Total Líquida:
+																				</th>
+																				<th>
+																					Investimentos:
+																				</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td
+																					th:text="${#numbers.formatCurrency(totalRevenue)}">
+																				</td>
+																				<td
+																					th:text="${#numbers.formatCurrency(totalExpense)}">
+																				</td>
+																				<td
+																					th:text="${#numbers.formatCurrency(totalRevenue - totalExpense)}">
+																				</td>
+																				<td>R$ 0,00</td>
+																			</tr>
+																		</tbody>
+																	</table>
+
+																	<h6 class="p-3 badge bg-danger"
+																		style="max-width: 200px;">*Nenhum investimento
+																		realizado</h6>
+																</div>
+
+																<canvas id="lineChart"
+																	style="max-height: 400px;"></canvas>
+																<script th:inline="javascript">
+
+																	/*<![CDATA[*/
+																	var revTotalMonthString = /*[[${totalMonth}]]*/ null;
+																	const months = /*[[${months}]]*/ null;
+																	/*]]>*/
+																	const revJson = JSON.parse(revTotalMonthString);
+
+																	let dateMonth = []
+																	let valueMonth = []
+																	const filterRev = revJson.forEach(rev => {
+																		if (rev.valor != "0.0") {
+																			const date = new Date(rev.data).getUTCMonth();
+																			dateMonth.push(months[date]);
+																			valueMonth.push(rev.valor)
+																		}
+																	});
+
+
+																	document.addEventListener("DOMContentLoaded", () => {
+																		new Chart(document.querySelector('#lineChart'), {
+																			type: 'line',
+																			data: {
+																				labels: dateMonth,
+																				datasets: [{
+																					label: 'Receita bruta mensal R$',
+																					data: valueMonth,
+																					fill: false,
+																					borderColor: '#04347c',
+																					tension: 0.1
+																				}]
+																			},
+																			options: {
+																				scales: {
+																					y: {
+																						beginAtZero: false
+																					}
+																				}
+																			}
+																		});
+																	});
+																</script>
 															</div>
-
-															<div th:class="${totalRevenue-totalExpense < 0} ? 'alert-danger card p-2 overflow-auto alert' : 'alert-info card p-2 overflow-auto alert'"
-																role="alert">
-
-																<table>
-																	<thead>
-																		<tr>
-																			<th>
-																				Receita Total Bruta:
-																			</th>
-																			<th>
-																				Despesa total:
-																			</th>
-																			<th>
-																				Receita Total Líquida:
-																			</th>
-																			<th>
-																				Investimentos:
-																			</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr>
-																			<td th:text="${#numbers.formatCurrency(totalRevenue)}"></td>
-																			<td th:text="${#numbers.formatCurrency(totalExpense)}"></td>
-																			<td th:text="${#numbers.formatCurrency(totalRevenue - totalExpense)}"></td>
-																			<td>R$ 0,00</td>
-																		</tr>
-																	</tbody>
-																</table>
-
-																<h6 class="p-3 badge bg-danger"
-																	style="max-width: 200px;">*Nenhum investimento
-																	realizado</h6>
-															</div>
-
+															<h4 th:if="${revs.size() < 1}" class="alert alert-danger">
+																Nenhuma receita até então</h4>
 														</div>
 
 													</div>
@@ -315,49 +412,6 @@
 										</div>
 									</div>
 								</div>
-								<canvas id="lineChart" style="max-height: 400px;"></canvas>
-								<script th:inline="javascript">
-									
-									/*<![CDATA[*/
-																var revTotalMonthString = /*[[${totalMonth}]]*/ null;
-																const months = /*[[${months}]]*/ null;
-									/*]]>*/
-									const revJson = JSON.parse(revTotalMonthString);
-									
-									let dateMonth = []
-									let valueMonth = []
-									const filterRev = revJson.forEach(rev=>{
-													if(rev.valor != "0.0"){
-														const date =  new Date(rev.data).getUTCMonth();
-														dateMonth.push(months[date]);
-														valueMonth.push(rev.valor)
-													}
-												});
-									
-									
-									document.addEventListener("DOMContentLoaded", () => {
-										new Chart(document.querySelector('#lineChart'), {
-											type: 'line',
-											data: {
-												labels: dateMonth,
-												datasets: [{
-													label: 'Receita bruta anual R$',
-													data: valueMonth,
-													fill: false,
-													borderColor: '#04347c',
-													tension: 0.1
-												}]
-											},
-											options: {
-												scales: {
-													y: {
-														beginAtZero: false
-													}
-												}
-											}
-										});
-									});
-								</script>
 							</section>
 						</div>
 						<!-- Fim navegação pessoa fisica -->
@@ -1322,28 +1376,8 @@
 			}).render();
 		});
 	</script>
+	<script type="text/javascript" th:src="@{/assets/scripts/scripts.js}"></script>
 
-	<!-- adicionar uma nova option em um select q for selecionado outros -->
-	<script th:inline="javascript">
-		const option = document.getElementById("option");
-		const outros = document.getElementById("outros");
-		const select = document.getElementById("select");
-
-
-		function selecionado(event) {
-			if (event.target.value == "Outros") {
-				outros.classList.remove('d-none');
-				outros.classList.add('d-block');
-			} else {
-				outros.classList.add('d-none');
-				outros.classList.remove('d-block');
-			}
-		}
-
-		function addCategory(event) {
-			$('select').append('<option value=' + event.target.value + ' selected>' + event.target.value + '</option>');
-		}
-	</script>
 </body>
 
 </html>
