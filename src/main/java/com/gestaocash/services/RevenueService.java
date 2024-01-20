@@ -14,6 +14,7 @@ public interface RevenueService {
 	List<Revenue> findRevenueAndUser(Long id);
 
 	Stream<Revenue> findRevenueFilterDate(LocalDate date, Long id);
+	double calcTotalRevenue(List<Revenue> revenue);
 
 	String calcTotalMonth(List<Revenue> revenue, int ano);
 

@@ -114,6 +114,16 @@ private static String transformarEmJSON(List<Revenue> revenue) {
 
      return jsonBuilder.toString();
 }
+@Override
+public double calcTotalRevenue(List<Revenue> revenue) {
+	double value = 0;
+	
+	for (Revenue rev : revenue) {
+		value += rev.getValor();
+	}
+	
+	return value;
+}
   
   
 }

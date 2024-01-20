@@ -14,6 +14,7 @@ public interface ExpenseService {
   
   List<Expense> findExpenseAndUser(Long id);
   Stream<Expense> findExpenseFilterDate(LocalDate date, Long id);
+  double calcTotalExpenses(List<Expense> expense);
 
   List<Expense> findAllExpense();
 

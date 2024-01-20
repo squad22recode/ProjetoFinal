@@ -271,7 +271,7 @@
 																</table>
 															</div>
 
-															<div class="card p-2 overflow-auto alert alert-danger"
+															<div th:class="${totalRevenue-totalExpense < 0} ? 'alert-danger card p-2 overflow-auto alert' : 'alert-info card p-2 overflow-auto alert'"
 																role="alert">
 
 																<table>
@@ -293,9 +293,9 @@
 																	</thead>
 																	<tbody>
 																		<tr>
-																			<td>R$ 840,40</td>
-																			<td>R$ 824,70</td>
-																			<td>R$ 15,30</td>
+																			<td th:text="${#numbers.formatCurrency(totalRevenue)}"></td>
+																			<td th:text="${#numbers.formatCurrency(totalExpense)}"></td>
+																			<td th:text="${#numbers.formatCurrency(totalRevenue - totalExpense)}"></td>
 																			<td>R$ 0,00</td>
 																		</tr>
 																	</tbody>

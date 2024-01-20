@@ -203,8 +203,11 @@ LocalDate parameterExp;
 		}
 		
 		String totalMonth = revenueService.calcTotalMonth(revenueService.findRevenueAndUser(id), LocalDate.now().getYear());
-	
 		
+		double totalRevenue = revenueService.calcTotalRevenue(revenues);
+		double totalExpense = expenseService.calcTotalExpenses(expenses);
+		model.addAttribute("totalRevenue",totalRevenue);
+		model.addAttribute("totalExpense",totalExpense);
 		model.addAttribute("data", data);
 		model.addAttribute("totalMonth", totalMonth);
 		model.addAttribute("months", months);

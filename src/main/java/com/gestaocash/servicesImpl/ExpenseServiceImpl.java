@@ -67,6 +67,15 @@ public List<Expense> findExpenseAndUser(Long id) {
 public Stream<Expense> findExpenseFilterDate(LocalDate date, Long id) {
 	return this.findExpenseAndUser(id).stream().filter(expense -> expense.getData().getMonth() == date.getMonth() && expense.getData().getYear() == date.getYear() );
 }
+
+@Override
+public double calcTotalExpenses(List<Expense> expense) {
+	double value = 0;
+	for (Expense exp : expense) {
+		value += exp.getValor();
+	}
+	return value;
+}
   
   
 }
