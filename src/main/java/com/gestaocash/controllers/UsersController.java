@@ -140,7 +140,7 @@ LocalDate parameterRev;
 	}
 
 	@GetMapping("/area-cliente")
-	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue,@RequestParam(required=false, name="date") String dateMonth) {
+	public ModelAndView areaDoCliente(Model model, Revenue revenue,@RequestParam(required=false, name="date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		modelAndView.addObject("states", StateEnum.values());
 		modelAndView.addObject("expense", new Expense());
@@ -151,7 +151,7 @@ LocalDate parameterRev;
 		
 		// String img = getUser.getImagemPerfil() + ":image/png;base64," + conver;
 		Long id = getUser.getId();
-		modelAndView.addObject("user", userService.findUserById(id));
+		
 //		Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
 //		model.addAttribute("img", img);
 
@@ -207,8 +207,9 @@ LocalDate parameterRev;
 		
 		double totalRevenue = revenueService.calcTotalRevenue(revenues);
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
-		
-		
+		Users user = userService.findUserById(id);
+		modelAndView.addObject("user", user);
+		modelAndView.addObject("companyEdit", user.getEmpresa());
 		model.addAttribute("totalRevenue",totalRevenue);
 		model.addAttribute("totalExpense",totalExpense);
 		model.addAttribute("data", data);

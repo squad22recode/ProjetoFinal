@@ -38,5 +38,19 @@ public class CompanyController {
 		
 		return "redirect:/usuario/area-cliente";
 	}
+	
+	@PostMapping("/editar-empresa")
+	public String editCompany(@ModelAttribute("company") Company company) {
+		
+		long id = data.DataUser().getId();
+		Users usuario = userService.findUserById(id);
+		compService.findCompanyById(usuario.getEmpresa().getIdEmpresa());
+		company.setIdEmpresa(usuario.getEmpresa().getIdEmpresa());
+		company.setUsuario(usuario);
+
+		compService.saveCompany(company);
+		userService.saveUser(usuario);
+		return "redirect:/usuario/area-cliente";
+	}
 
 }
