@@ -37,6 +37,7 @@ import com.gestaoCash.enums.CategoryEnum;
 import com.gestaoCash.enums.MonthEnum;
 import com.gestaoCash.enums.StateEnum;
 import com.gestaoCash.model.Address;
+import com.gestaoCash.model.Company;
 import com.gestaoCash.model.Expense;
 import com.gestaoCash.model.Revenue;
 import com.gestaoCash.model.Users;
@@ -141,16 +142,16 @@ LocalDate parameterRev;
 	@GetMapping("/area-cliente")
 	public ModelAndView areaDoCliente(Model model, Users user, Revenue revenue,@RequestParam(required=false, name="date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
-
+		modelAndView.addObject("states", StateEnum.values());
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
+		modelAndView.addObject("company", new Company());
 		
 		Users getUser = data.DataUser();
-
+		
 		// String img = getUser.getImagemPerfil() + ":image/png;base64," + conver;
 		Long id = getUser.getId();
 		modelAndView.addObject("user", userService.findUserById(id));
-		model.addAttribute("getUser", getUser);
 //		Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
 //		model.addAttribute("img", img);
 
@@ -263,11 +264,9 @@ LocalDate parameterRev;
 	public String editUser(@ModelAttribute("user") Users editUser, @RequestParam("inputImg") MultipartFile file,
 			BindingResult result) throws IOException {
 
-		try {	if(file != null) {
-				editUser.setImagemPerfil(file.getBytes());}
-		else {
-			editUser.setImagemPerfil(data.DataUser().getImagemPerfil());
-		}
+		try {
+			editUser.setImagemPerfil(file.getBytes());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

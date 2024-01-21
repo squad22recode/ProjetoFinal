@@ -37,6 +37,10 @@ public class Users {
 	
 	@OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Expense> expense = new ArrayList<Expense>();
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="id_empresa", referencedColumnName = "id_empresa")
+	private Company empresa;
 
 	// pode ser unidirecional ou bidirecional
 	// um usuario (essa classe) pode ter varias despesas (set<Expense> expenses)
@@ -208,6 +212,15 @@ public class Users {
 
 	public void setInstagram(String instagram) {
 		this.instagram = instagram;
+	}
+	
+	
+	public Company getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Company empresa) {
+		this.empresa = empresa;
 	}
 
 	public static Object withDefaultPasswordEncoder() {
