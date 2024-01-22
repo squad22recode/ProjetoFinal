@@ -13,7 +13,7 @@
 					</div>
 					<div class="modal-body">
 						<form class="row g-3" method="post" th:object="${companyEdit}" th:action="@{/usuario/area-cliente/editar-empresa}">
-							<input type="hidden" th:field="*{enderecoEmpresa.id}" th:value="${companyEdit.getEnderecoEmpresa().getId()}"/>
+							<!-- <input type="hidden" th:field="*{enderecoEmpresa.id}" th:value="${companyEdit.getEnderecoEmpresa().getId()}"/> -->
 							<div class="col-md-4">
 								<label for="inputName" class="form-label">Nome da empresa</label>
 								<input type="text" class="form-control" id="inputName" required th:field="*{nomeEmpresa}" />
