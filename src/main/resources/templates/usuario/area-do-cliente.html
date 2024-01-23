@@ -24,8 +24,12 @@
 				<div class="card">
 					<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-						<img th:src="|/usuario/imagem/${user.getId()}|" alt="Profile" class="rounded-circle">
+					 <!-- <img th:src="@{ ${user.getImagemPerfil != null} ? '/usuario/imagem/' + ${user.getId} : 'https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/user-default.svg'}" alt="Profile" class="rounded-circle"> 
+					 -->
+					 <img th:src="|/usuario/imagem/${user.getId()}|" onerror="this.src='https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/user-default.svg';" alt="Profile" class="rounded-circle"> 
+
 						<h2 th:text="${user.getNome()}"></h2>
+					
 						<h3>Produtos eletrônicos</h3>
 						<button type="button" class="btn btn-primary">
 							<a class="link-offset-2 link-underline link-underline-opacity-0 link-light"
@@ -848,12 +852,34 @@
 								<div class="pagetitle">
 									<h1>Área do conhecimento</h1>
 								</div>
+								<h2  th:if="${favorites.size() > 0}">Cursos favoritos </h2>
+							
+
+								<main class="row gap-2 ">
+									<div th:each="course: ${favorites}" class="card card-study">
+										<h3 class="card-header" th:text="${course.nomeCurso}"></h3>
+										<div>
+											<p th:text="@{'Duração' + ${course.duracao } + h}"> <i class="bi bi-alarm"></i> </p>
+											<p th:text="@{'Conclusão ' + ${course.conclusao } + ' Dias'}"> ></i> Conclusão dias</p>
+										</div>
+										<p class="card-body" th:text="${course.descricao}"></p>
+										
+								
+
+											<a th:href="${course.url}"
+												class="btn" target="_blanck">Saiba mais</a>
+	
+												<a th:href="@{'/cursos/excluir/' + ${course.id}}"
+												class="btn btn-danger">Remover dos favoritos</a>
+									
+									</div>
+
+								</main>
 
 								<div class="section dashboard">
+									<h2>Cursos indicados</h2>
 									<div class="row gap-2  justify-content-center">
 									
-
-
 									</div>
 								</div>
 							</section>
