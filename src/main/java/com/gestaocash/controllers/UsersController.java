@@ -14,8 +14,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
-
 import javax.swing.ImageIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +36,7 @@ import com.gestaoCash.enums.MonthEnum;
 import com.gestaoCash.enums.StateEnum;
 import com.gestaoCash.model.Address;
 import com.gestaoCash.model.Company;
+import com.gestaoCash.model.Course;
 import com.gestaoCash.model.Expense;
 import com.gestaoCash.model.Revenue;
 import com.gestaoCash.model.Users;
@@ -62,7 +61,6 @@ public class UsersController {
 
 	@Autowired
 	UserRepository userepo;
-	
 
 	@Autowired
 	ExpenseRespository expRepo;
@@ -74,8 +72,8 @@ public class UsersController {
 	private RevenueService revenueService;
 
 	DataUserAuth data = new DataUserAuth();
-	
-LocalDate parameterRev;
+
+	LocalDate parameterRev;
 
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
@@ -99,7 +97,7 @@ LocalDate parameterRev;
 	@PostMapping("/cadastro")
 	public ModelAndView cadastrar(Model model, @ModelAttribute("user") Users user,
 			@RequestParam("inputImg") MultipartFile file, BindingResult result) throws IOException {
-				
+
 		try {
 			user.setImagemPerfil(file.getBytes());
 		} catch (IOException e) {
@@ -123,7 +121,7 @@ LocalDate parameterRev;
 		String senhaEncriptada = SenhaUtils.encode(user.getSenha());
 		user.setSenha(senhaEncriptada);
 		user.setTipoUsuario("user");
-		
+
 		userService.saveUser(user);
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		return modelAndView;
@@ -134,89 +132,94 @@ LocalDate parameterRev;
 	@ResponseBody
 	public byte[] exibirImagen() {
 		Long id = data.DataUser().getId();
-//		Users user = this.userepo.getReferenceById(id);
+		// Users user = this.userepo.getReferenceById(id);
 		Users user = userService.findUserById(id);
+
 		return user.getImagemPerfil();
 	}
 
 	@GetMapping("/area-cliente")
-	public ModelAndView areaDoCliente(Model model, Revenue revenue,@RequestParam(required=false, name="date") String dateMonth) {
+	public ModelAndView areaDoCliente(Model model, Revenue revenue,
+			@RequestParam(required = false, name = "date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		modelAndView.addObject("states", StateEnum.values());
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		modelAndView.addObject("company", new Company());
-		
+
 		Users getUser = data.DataUser();
-		
+
 		// String img = getUser.getImagemPerfil() + ":image/png;base64," + conver;
 		Long id = getUser.getId();
-		
-//		Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
-//		model.addAttribute("img", img);
+
+		// Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
+		// model.addAttribute("img", img);
 
 		// List<Revenue> revenues = revRepo.findRevenueByUser(data.DataUser().getId());
-		
-		//List<Revenue> revenues = revenueService.findRevenueAndUser(id);
-//		List<Expense> expenses = expenseService.findExpenseAndUser(id);
+
+		// List<Revenue> revenues = revenueService.findRevenueAndUser(id);
+		// List<Expense> expenses = expenseService.findExpenseAndUser(id);
 
 		CategoryEnum[] cats = CategoryEnum.values();
 		MonthEnum[] months = MonthEnum.values();
-		
+
 		List<Revenue> revenues;
 		List<Expense> expenses;
-		
-		
-		
-		Locale local = new Locale("pt","BR");
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MMMM-yyyy",local);
-		DateTimeFormatter formatoDois = DateTimeFormatter.ofPattern("MMMM-yyyy",local);
-		
-		if(dateMonth != null) {
-			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-"+dateMonth,formato), id).collect(Collectors.toList());	
-			expenses = expenseService.findExpenseFilterDate(LocalDate.parse("01-"+dateMonth,formato), id).collect(Collectors.toList());	
-		}else {
+
+		Locale local = new Locale("pt", "BR");
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MMMM-yyyy", local);
+		DateTimeFormatter formatoDois = DateTimeFormatter.ofPattern("MMMM-yyyy", local);
+
+		if (dateMonth != null) {
+			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-" + dateMonth, formato), id)
+					.collect(Collectors.toList());
+			expenses = expenseService.findExpenseFilterDate(LocalDate.parse("01-" + dateMonth, formato), id)
+					.collect(Collectors.toList());
+		} else {
 			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id).collect(Collectors.toList());
-			expenses = expenseService.findExpenseFilterDate(LocalDate.now(), id).collect(Collectors.toList());	
+			expenses = expenseService.findExpenseFilterDate(LocalDate.now(), id).collect(Collectors.toList());
 		}
-		
-		
-//		ObjectMapper mapper = new ObjectMapper();
-//		String reve = mapper.writeValueAsString(revenues);
+
+		// ObjectMapper mapper = new ObjectMapper();
+		// String reve = mapper.writeValueAsString(revenues);
 		List<String> expe = new ArrayList<>();
 		for (Expense e : expenses) {
 			expe.add(e.toString());
 		}
-		
-//		Locale local = new Locale("pt","BR");
-//		DateFormat formato = new SimpleDateFormat("MMMM yyyy",local);
+
+		// Locale local = new Locale("pt","BR");
+		// DateFormat formato = new SimpleDateFormat("MMMM yyyy",local);
 		Set<String> data = new HashSet<>();
-		
-		if(expenseService.findExpenseAndUser(id).size() > revenueService.findRevenueAndUser(id).size()) {
+
+		if (expenseService.findExpenseAndUser(id).size() > revenueService.findRevenueAndUser(id).size()) {
 			for (Expense e : expenseService.findExpenseAndUser(id)) {
-				data.add(formatoDois.format(e.getData()).substring(0,1).toUpperCase().concat(formatoDois.format(e.getData()).substring(1)));
-			}	
-		}else {
-			
+				data.add(formatoDois.format(e.getData()).substring(0, 1).toUpperCase()
+						.concat(formatoDois.format(e.getData()).substring(1)));
+			}
+		} else {
+
 			for (Revenue e : revenueService.findRevenueAndUser(id)) {
-				data.add(formatoDois.format(e.getData()).substring(0,1).toUpperCase().concat(formatoDois.format(e.getData()).substring(1)));
-			}	
+				data.add(formatoDois.format(e.getData()).substring(0, 1).toUpperCase()
+						.concat(formatoDois.format(e.getData()).substring(1)));
+			}
 		}
-		
+
 		String totalMonth = revenueService.calcTotalMonth(revenueService.findRevenueAndUser(id), LocalDate.now().getYear());
-		
+
 		double totalRevenue = revenueService.calcTotalRevenue(revenues);
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
 		Users user = userService.findUserById(id);
 		model.addAttribute("user", user);
-		
-		if(user.getEmpresa() != null) {
-		model.addAttribute("companyEdit", user.getEmpresa());
+
+		model.addAttribute("favorites", user.getFavoriteCourses());
+
+		if (user.getEmpresa() != null) {
+			model.addAttribute("companyEdit", user.getEmpresa());
 		}
-		
+
 		System.out.println(user.getEmpresa());
-		model.addAttribute("totalRevenue",totalRevenue);
-		model.addAttribute("totalExpense",totalExpense);
+		model.addAttribute("totalRevenue", totalRevenue);
+		model.addAttribute("totalExpense", totalExpense);
 		model.addAttribute("data", data);
 		model.addAttribute("totalMonth", totalMonth);
 		model.addAttribute("months", months);
@@ -224,19 +227,21 @@ LocalDate parameterRev;
 		model.addAttribute("expsString", expe);
 		model.addAttribute("exps", expenses);
 		model.addAttribute("revs", revenues);
-		model.addAttribute("dateMonth", dateMonth != null ? dateMonth.substring(0,1).toUpperCase().concat(dateMonth.substring(1)).replace("-", " "): formatoDois.format(LocalDate.now()).substring(0,1).toUpperCase().concat(formatoDois.format(LocalDate.now()).substring(1)));
+		model.addAttribute("dateMonth",
+				dateMonth != null ? dateMonth.substring(0, 1).toUpperCase().concat(dateMonth.substring(1)).replace("-", " ")
+						: formatoDois.format(LocalDate.now()).substring(0, 1).toUpperCase()
+								.concat(formatoDois.format(LocalDate.now()).substring(1)));
 		return modelAndView;
 	}
-	
-	
+
 	@PostMapping("/area-cliente/receita")
 	public String addRevenue(@ModelAttribute("revenue") Revenue revenue) {
 
 		Users user = new Users();
 
 		// pegando os dados do usuário logado
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		UserDetailsImpl dateUser = (UserDetailsImpl) auth.getPrincipal();
+		// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		// UserDetailsImpl dateUser = (UserDetailsImpl) auth.getPrincipal();
 
 		// pegando o id
 		Long id = data.DataUser().getId();
@@ -247,8 +252,8 @@ LocalDate parameterRev;
 		revenue.setUsuario(user);
 		revenueService.saveRevenue(revenue);
 
-//		ModelAndView modelAndView = new ModelAndView("redirect:/area-do-cliente");
-//		
+		// ModelAndView modelAndView = new ModelAndView("redirect:/area-do-cliente");
+		//
 		return "redirect:/usuario/area-cliente";
 	}
 
@@ -273,31 +278,30 @@ LocalDate parameterRev;
 		Users user = userService.findUserById(id);
 
 		try {
-			if(file != null) {
-				
-			editUser.setImagemPerfil(file.getBytes());
-			
-			}else {
+			if (file != null) {
+
+				editUser.setImagemPerfil(file.getBytes());
+
+			} else {
 				editUser.setImagemPerfil(user.getImagemPerfil());
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		String typeUser = user.getTipoUsuario();
 		String password = user.getSenha();
-		
-	
+
 		editUser.setId(id);
 		editUser.setSenha(password);
 		editUser.setTipoUsuario(typeUser);
-		
-		if(user.getEmpresa() != null) {
-			
+
+		if (user.getEmpresa() != null) {
+
 			editUser.setEmpresa(user.getEmpresa());
 		}
-		
+
 		userService.saveUser(editUser);
 		return "redirect:/usuario/area-cliente";
 	}

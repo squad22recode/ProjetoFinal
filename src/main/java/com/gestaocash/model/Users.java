@@ -3,19 +3,25 @@ package com.gestaoCash.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -34,13 +40,17 @@ public class Users {
 
 	@OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Revenue> revenue = new ArrayList<Revenue>();
-	
+
 	@OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Expense> expense = new ArrayList<Expense>();
-	
+
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name="id_empresa", referencedColumnName = "id_empresa")
+	@JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
 	private Company empresa;
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "favoriteCourses", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+	private Set<Course> favoriteCourses = new HashSet<>();
 
 	// pode ser unidirecional ou bidirecional
 	// um usuario (essa classe) pode ter varias despesas (set<Expense> expenses)
@@ -72,7 +82,7 @@ public class Users {
 	@Column(columnDefinition = "VARCHAR(5)")
 	private String tipoUsuario;
 
-	@Column( columnDefinition = "CHAR(14)")
+	@Column(columnDefinition = "CHAR(14)")
 	private String cpf;
 
 	@Column(columnDefinition = "varchar(50)")
@@ -84,7 +94,7 @@ public class Users {
 	@Column(columnDefinition = "varchar(16)")
 	private String telefone;
 
-	@Column( columnDefinition = "VARCHAR(50)")
+	@Column(columnDefinition = "VARCHAR(50)")
 	private String email;
 
 	@Column(columnDefinition = "longblob")
@@ -99,8 +109,6 @@ public class Users {
 	private String linkedin;
 	@Column(columnDefinition = "VARCHAR(100)")
 	private String instagram;
-
-
 
 	public Long getId() {
 		return id;
@@ -162,6 +170,14 @@ public class Users {
 		return telefone;
 	}
 
+	public Set<Course> getFavoriteCourses() {
+		return favoriteCourses;
+	}
+
+	public void setFavoriteCourses(Set<Course> favoriteCourses) {
+		this.favoriteCourses = favoriteCourses;
+	}
+
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
@@ -213,8 +229,7 @@ public class Users {
 	public void setInstagram(String instagram) {
 		this.instagram = instagram;
 	}
-	
-	
+
 	public Company getEmpresa() {
 		return empresa;
 	}
@@ -236,6 +251,5 @@ public class Users {
 				+ email + ", imagemPerfil=" + Arrays.toString(imagemPerfil) + ", sexo=" + sexo + ", facebook="
 				+ facebook + ", linkedin=" + linkedin + ", instagram=" + instagram + "]";
 	}
-	
 
 }
