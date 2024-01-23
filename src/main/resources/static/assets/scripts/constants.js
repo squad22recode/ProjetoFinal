@@ -84,16 +84,19 @@ courses.forEach(course => {
   <p class="card-body">${course.description}</p>
   <a href="${course.url}"
     class="btn" target="_blanck">Saiba mais</a>
-  <form action="/cursos/save" method="post">
+  <form action="/cursos/salvar" method="post">
     <!-- Campos ocultos para passar informações ao controlador -->
-    <input type="hidden" name="nomeCurso" value="${course.name}">
+    <input type="hidden" name="name" value="${course.name}">
     <input type="hidden" name="url"
       value="${course.url}">
-    <input type="hidden" name="descricao"
+    <input type="hidden" name="description"
       value="${course.description}">
+      <input type="hidden" name="conclusion"
+      value="${course.conclusion}">
+      <input type="hidden" name="duration"
+      value="${course.duration}">
     <!-- Botão para salvar o curso -->
-    <button type="submit" class="btn btn-primary" target="_blank">Salvar
-      Curso</button>
+    <button type="submit" class="btn btn-secondary" target="_blank">Adicionar aos favoritos</button>
   </form>
 </div>
 
