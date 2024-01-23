@@ -11,7 +11,7 @@ header li a {
 }
 
 header li a:hover {
-    opacity: .5;
+    opacity: 0.5;
 }
 
 .active {
@@ -26,7 +26,6 @@ header li a:hover {
     max-width: 170px;
 }
 
-
 .card-body {
     padding: 0 20px 20px 20px;
 }
@@ -34,8 +33,11 @@ header li a:hover {
 .card {
     margin-bottom: 30px;
     border: none;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+    background-clip: border-box;
+    border-radius: 0.25rem;
+    /* box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.13); */
 }
 
 .profile .profile-card img {
@@ -44,6 +46,9 @@ header li a:hover {
 
 .profile .profile-card img {
     max-width: 120px;
+    height: 120px;
+    border: 5px solid #000;
+    object-fit: cover;
 }
 
 .profile .profile-card h2 {
@@ -94,18 +99,20 @@ header li a:hover {
 }
 
 .card-study {
-    background-color: var(--azul-escuro) !important;
+    /* background-color: rgb(4, 52, 124, 0.9) !important; */
     width: 400px !important;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 5px;
-
     justify-content: space-between;
 }
 
 .card-study .card-header {
     background-color: var(--azul-escuro);
+    align-items: center;
+    justify-content: center;
+    display: flex;
     border-bottom: none;
     text-align: center;
     color: var(--cinza-quase-branco);
@@ -124,7 +131,8 @@ header li a:hover {
 }
 
 .card-study div p {
-    color: var(--cinza-claro);
+    /* color: var(--cinza-claro); */
+    color: #000;
 }
 
 .card-study i {
@@ -132,8 +140,7 @@ header li a:hover {
 }
 
 .card-study a {
-    background-color: #5197f5;
+    background-color: var(--azul-escuro);
     width: 50%;
     color: var(--cinza-quase-branco);
-
 }
