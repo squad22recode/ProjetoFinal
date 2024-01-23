@@ -84,12 +84,6 @@ public class Company {
 		this.razaoSocial = razaoSocial;
 	}
 
-	@Override
-	public String toString() {
-		return "Company [idEmpresa=" + idEmpresa + ", nomeEmpresa=" + nomeEmpresa + ", cnpj=" + cnpj + ", razaoSocial="
-				+ razaoSocial + ", usuario=" + usuario + ", enderecoEmpresa=" + enderecoEmpresa.toString() + "]";
-	}
-	
-	
+
 		
 }

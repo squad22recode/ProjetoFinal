@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gestaoCash.model.Users;
+import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.UserRepository;
 import com.gestaoCash.services.UserService;
 
@@ -19,9 +20,13 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private UserRepository userRepository;
+  @Autowired
+  private AddressRepository addressRepo;
 
   @Override
   public void saveUser(Users user) {
+	  
+	  
     this.userRepository.save(user);
   }
 

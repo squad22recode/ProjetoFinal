@@ -41,6 +41,7 @@ import com.gestaoCash.model.Company;
 import com.gestaoCash.model.Expense;
 import com.gestaoCash.model.Revenue;
 import com.gestaoCash.model.Users;
+import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.repositories.RevenueRepository;
 import com.gestaoCash.repositories.UserRepository;
@@ -61,12 +62,10 @@ public class UsersController {
 
 	@Autowired
 	UserRepository userepo;
+	
 
 	@Autowired
 	ExpenseRespository expRepo;
-
-	@Autowired
-	private RevenueRepository revRepo;
 
 	@Autowired
 	private ExpenseService expenseService;
@@ -100,7 +99,7 @@ LocalDate parameterRev;
 	@PostMapping("/cadastro")
 	public ModelAndView cadastrar(Model model, @ModelAttribute("user") Users user,
 			@RequestParam("inputImg") MultipartFile file, BindingResult result) throws IOException {
-
+				
 		try {
 			user.setImagemPerfil(file.getBytes());
 		} catch (IOException e) {
@@ -124,6 +123,7 @@ LocalDate parameterRev;
 		String senhaEncriptada = SenhaUtils.encode(user.getSenha());
 		user.setSenha(senhaEncriptada);
 		user.setTipoUsuario("user");
+		
 		userService.saveUser(user);
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		return modelAndView;
@@ -208,8 +208,13 @@ LocalDate parameterRev;
 		double totalRevenue = revenueService.calcTotalRevenue(revenues);
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
 		Users user = userService.findUserById(id);
-		modelAndView.addObject("user", user);
-		modelAndView.addObject("companyEdit", user.getEmpresa());
+		model.addAttribute("user", user);
+		
+		if(user.getEmpresa() != null) {
+		model.addAttribute("companyEdit", user.getEmpresa());
+		}
+		
+		System.out.println(user.getEmpresa());
 		model.addAttribute("totalRevenue",totalRevenue);
 		model.addAttribute("totalExpense",totalExpense);
 		model.addAttribute("data", data);
@@ -264,20 +269,34 @@ LocalDate parameterRev;
 	@PostMapping("/editar")
 	public String editUser(@ModelAttribute("user") Users editUser, @RequestParam("inputImg") MultipartFile file,
 			BindingResult result) throws IOException {
+		Long id = data.DataUser().getId();
+		Users user = userService.findUserById(id);
 
 		try {
+			if(file != null) {
+				
 			editUser.setImagemPerfil(file.getBytes());
+			
+			}else {
+				editUser.setImagemPerfil(user.getImagemPerfil());
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		String password = data.DataUser().getSenha();
-		Long id = data.DataUser().getId();
-		String typeUser = data.DataUser().getTipoUsuario();
+		String typeUser = user.getTipoUsuario();
+		String password = user.getSenha();
+		
+	
 		editUser.setId(id);
 		editUser.setSenha(password);
 		editUser.setTipoUsuario(typeUser);
+		
+		if(user.getEmpresa() != null) {
+			
+			editUser.setEmpresa(user.getEmpresa());
+		}
 		
 		userService.saveUser(editUser);
 		return "redirect:/usuario/area-cliente";

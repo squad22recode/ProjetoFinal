@@ -116,12 +116,6 @@ public class AddressCompany {
 		this.complemento = complemento;
 	}
 
-	@Override
-	public String toString() {
-		return "AddressCompany [id=" + id + ", bairro=" + bairro + ", cep=" + cep + ", estado=" + estado + ", cidade="
-				+ cidade + ", endereco=" + endereco + ", complemento=" + complemento + "]";
-	}
-	
 	
 	
 }

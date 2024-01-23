@@ -2,7 +2,7 @@ package com.gestaoCash.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,7 +28,7 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(cascade = CascadeType.MERGE)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "endereco_id", referencedColumnName = "id")
 	private Address enderecoUsuario;
 
@@ -38,7 +38,7 @@ public class Users {
 	@OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Expense> expense = new ArrayList<Expense>();
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="id_empresa", referencedColumnName = "id_empresa")
 	private Company empresa;
 
@@ -227,5 +227,15 @@ public class Users {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", enderecoUsuario=" + enderecoUsuario.toString() + ", revenue=" + revenue + ", expense="
+				+ expense + ", empresa=" + empresa + ", senha=" + senha + ", tipoUsuario=" + tipoUsuario + ", cpf="
+				+ cpf + ", nome=" + nome + ", dataNascimento=" + dataNascimento + ", telefone=" + telefone + ", email="
+				+ email + ", imagemPerfil=" + Arrays.toString(imagemPerfil) + ", sexo=" + sexo + ", facebook="
+				+ facebook + ", linkedin=" + linkedin + ", instagram=" + instagram + "]";
+	}
+	
 
 }

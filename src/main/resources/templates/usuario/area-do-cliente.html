@@ -192,14 +192,14 @@
 						<div class="tab-pane fade profile-legal pt-3" id="profile-legal">
 	
 							<section id="main" class="main">
-								<!-- Modal cadastro da empresa 
+								<!-- Modal cadastro da empresa -->
 								<div th:replace="~{fragments/empresa/cadastro-empresa :: register-company}"></div>
-								<!-- Modal editar da empresa 
-								<div th:replace="~{fragments/empresa/edit-empresa :: edit-company}"></div> -->
+								<!-- Modal editar da empresa -->
+								<div th:if="${user.getEmpresa()} != null" th:insert="~{fragments/empresa/edit-empresa :: edit-company}"></div>
 								<div class="pagetitle d-flex justify-content-between">
 									<h1>Pessoa Jurídica</h1>
-								<!--	<h5 th:if="${user.getEmpresa().getIdEmpresa()} == 0" role="button" data-bs-toggle="modal" data-bs-target="#registerCompanyModal"><i class="bi bi-plus-lg" ></i> Adicionar empresa</h5>
-								 <h5 th:if="${user.getEmpresa().getIdEmpresa()} != 0" role="button" data-bs-toggle="modal" data-bs-target="#editCompanyModal"><i class="bi bi-pencil"></i> Editar empresa</h5> -->
+									<h5 th:if="${user.getEmpresa()} == null" role="button" data-bs-toggle="modal" data-bs-target="#registerCompanyModal"><i class="bi bi-plus-lg" ></i> Adicionar empresa</h5>
+								 <h5 th:if="${user.getEmpresa()} != null" role="button" data-bs-toggle="modal" data-bs-target="#editCompanyModal"><i class="bi bi-pencil"></i> Editar empresa</h5> 
 								</div>
 
 								<div class="section dashboard">
