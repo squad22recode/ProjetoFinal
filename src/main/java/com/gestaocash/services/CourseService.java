@@ -11,6 +11,8 @@ public interface CourseService {
 
   Course findCourseById(Long id);
 
+  Course findCourseByName(String name);
+
   void updateCourseById(Long id, Course updatedCourse);
 
   void deleteCourseById(Long id);

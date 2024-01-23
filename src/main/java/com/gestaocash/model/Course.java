@@ -20,6 +20,8 @@ public class Course {
 
   private String url;
   private String descricao;
+  private int duracao;
+  private int conclusao;
 
   private boolean concluido; // Campo para indicar se o curso foi concluído
 
@@ -41,6 +43,22 @@ public class Course {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public int getDuracao() {
+    return duracao;
+  }
+
+  public void setDuracao(int duracao) {
+    this.duracao = duracao;
+  }
+
+  public int getConclusao() {
+    return conclusao;
+  }
+
+  public void setConclusao(int conclusao) {
+    this.conclusao = conclusao;
   }
 
   public String getNomeCurso() {

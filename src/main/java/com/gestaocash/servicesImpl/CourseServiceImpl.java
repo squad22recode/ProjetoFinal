@@ -66,4 +66,11 @@ public class CourseServiceImpl implements CourseService {
     this.courseRepository.deleteById(id);
   }
 
+  @Override
+  public Course findCourseByName(String name) {
+    var course = this.courseRepository.findByNomeCurso(name);
+
+    return course;
+  }
+
 }
