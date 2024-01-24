@@ -40,12 +40,15 @@ import com.gestaoCash.model.Company;
 import com.gestaoCash.model.Course;
 import com.gestaoCash.model.Expense;
 import com.gestaoCash.model.Revenue;
+import com.gestaoCash.model.Role;
 import com.gestaoCash.model.Users;
 import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.repositories.RevenueRepository;
+import com.gestaoCash.repositories.RoleRepository;
 import com.gestaoCash.repositories.UserRepository;
 import com.gestaoCash.services.ClientService;
+import com.gestaoCash.services.CourseService;
 import com.gestaoCash.services.ExpenseService;
 import com.gestaoCash.services.RevenueService;
 import com.gestaoCash.services.UserService;
@@ -62,11 +65,17 @@ public class UsersController {
 	private UserService userService;
 
 	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
 	UserRepository userepo;
 
 	@Autowired
 	ExpenseRespository expRepo;
-	
+
+	@Autowired
+	private CourseService courseService;
+
 	@Autowired
 	private ClientService clientService;
 
@@ -127,6 +136,16 @@ public class UsersController {
 		user.setSenha(senhaEncriptada);
 		user.setTipoUsuario("user");
 
+		Role role = this.roleRepository.findByAuthority("ROLE_COMUM");
+
+		if (role == null) {
+			throw new IllegalStateException("'ROLE_COMUM' não encontrada");
+		}
+		Set<Role> roles = new HashSet<>();
+		roles.add(role);
+
+		user.setRoles(roles);
+
 		userService.saveUser(user);
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		return modelAndView;
@@ -148,6 +167,7 @@ public class UsersController {
 			@RequestParam(required = false, name = "date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		modelAndView.addObject("states", StateEnum.values());
+		modelAndView.addObject("courses", this.courseService.findAllCourse());
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		modelAndView.addObject("company", new Company());
@@ -222,9 +242,11 @@ public class UsersController {
 		if (user.getEmpresa() != null) {
 			model.addAttribute("companyEdit", user.getEmpresa());
 		}
-		
-		List<Client> clients = clientService.findAllClient().stream().filter(client-> client.getEmpresa().getIdEmpresa() == user.getEmpresa().getIdEmpresa()).collect(Collectors.toList());
-		
+
+		List<Client> clients = clientService.findAllClient().stream()
+				.filter(client -> client.getEmpresa().getIdEmpresa() == user.getEmpresa().getIdEmpresa())
+				.collect(Collectors.toList());
+
 		model.addAttribute("clients", clients);
 		model.addAttribute("totalRevenue", totalRevenue);
 		model.addAttribute("totalExpense", totalExpense);
