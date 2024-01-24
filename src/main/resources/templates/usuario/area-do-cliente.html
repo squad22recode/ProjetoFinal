@@ -853,9 +853,9 @@
 									<div th:each="course: ${favorites}" class="card card-study">
 										<h3 class="card-header" th:text="${course.nomeCurso}"></h3>
 										<div>
-											<p th:text="@{'Duração' + ${course.duracao } + h}"> <i
+											<p th:utext="@{'Duração' + ${course.duracao } + h}"> <i
 													class="bi bi-alarm"></i> </p>
-											<p th:text="@{'Conclusão ' + ${course.conclusao } + ' Dias'}"> ></i>
+											<p th:utext="@{'Conclusão ' + ${course.conclusao} + ' Dias'}"> ></i>
 												Conclusão dias</p>
 										</div>
 										<p class="card-body" th:text="${course.descricao}"></p>
@@ -873,8 +873,35 @@
 
 								<div class="section dashboard">
 									<h2>Cursos indicados</h2>
-									<div class="row gap-2  justify-content-center">
+									<div class="row gap-2  justify-content-center" >
 
+										<div class="card card-study" th:each="c : ${courses}">
+											<h3 th:text="${c.nomeCurso}" class="card-header"></h3>
+											<div>
+												<p th:utext="@{'Duração ' + ${c.duracao} +h}"> <i class="bi bi-alarm"></i></p>
+												<p th:utext="@{'Conclusão ' + ${c.conclusao} + ' dias'}"> <i class="bi bi-calendar3"></i> </p>
+											</div>
+											<p class="card-body" th:text="${c.descricao}"></p>
+											<a th:href="${c.url}"
+												class="btn" target="_blanck">Saiba mais</a>
+											<form th:action="@{/cursos/salvar}" method="post">
+												<!-- Campos ocultos para passar informações ao controlador -->
+												<input type="hidden" name="name" th:value="${c.nomeCurso}">
+												<input type="hidden" name="url"
+													th:value="${c.url}">
+												<input type="hidden" name="description"
+													th:value="${c.descricao}">
+													<input type="hidden" name="conclusion"
+													th:value="${c.conclusao}">
+													<input type="hidden" name="duration"
+													th:value="${c.duracao}">
+												<!-- Botão para salvar o curso -->
+												<button type="submit" class="btn btn-secondary" target="_blank">Adicionar aos favoritos</button>
+											</form>
+										</div>
+										
+										
+				
 									</div>
 								</div>
 							</section>
@@ -890,7 +917,7 @@
 	</section>
 	<div th:replace="~{fragments/footer :: footer}"></div>
 
-	<script src="/assets/scripts/constants.js"></script>
+	<!-- <script src="/assets/scripts/constants.js"></script> -->
 	<!-- script do Chart.js -->
 	<script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
 	<script src="/assets/vendor/chart.js/chart.umd.js"></script>
