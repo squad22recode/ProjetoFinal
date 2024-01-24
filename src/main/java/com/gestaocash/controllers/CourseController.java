@@ -37,17 +37,25 @@ public class CourseController {
     return "";
   }
 
-  @GetMapping("/novo")
-  public String showForm(Model model) {
-    var course = new Course();
-    model.addAttribute("curso", course);
+  // @GetMapping("/novo")
+  // public String showForm(Model model) {
+  // var course = new Course();
+  // model.addAttribute("curso", course);
 
-    return "";
+  // return "";
+  // }
+
+  @PostMapping("/novo")
+  public String saveCourse(@ModelAttribute("course") Course course) {
+    this.courseService.saveCourse(course);
+    return "redirect:/painel-controle";
   }
 
+  // metodo para salvar cursos favoritos do usuario logado
   @PostMapping("/salvar")
   public String saveCourse(@RequestParam("name") String name, @RequestParam("conclusion") int conclusion,
-      @RequestParam("description") String description, @RequestParam("url") String url) {
+      @RequestParam("description") String description, @RequestParam("url") String url,
+      @RequestParam("duration") int duration) {
 
     var existsCourse = this.courseService.findCourseByName(name);
 
@@ -55,6 +63,7 @@ public class CourseController {
     course.setNomeCurso(name);
     course.setConclusao(conclusion);
     course.setDescricao(description);
+    course.setDuracao(duration);
     course.setUrl(url);
 
     var user = this.userService.findUserById(data.DataUser().getId());
@@ -72,20 +81,28 @@ public class CourseController {
   @GetMapping("/editar/{id}")
   public String showEditForm(@PathVariable Long id, Model model) {
     var course = this.courseService.findCourseById(id);
-    model.addAttribute("curso", course);
+    model.addAttribute("course", course);
 
-    return "";
+    return "/curso/edit";
   }
 
   @PostMapping("/editar/{id}")
-  public String updateCourse(@ModelAttribute("curso") Course updatedCourse, @PathVariable Long id) {
+  public String updateCourse(@ModelAttribute("course") Course updatedCourse, @PathVariable Long id) {
     this.courseService.updateCourseById(id, updatedCourse);
 
-    return "redirect:/cursos";
+    return "redirect:/painel-controle";
   }
 
-  @GetMapping("/excluir/{id}")
+  @GetMapping("/delete/{id}")
   public String deleteCourse(@PathVariable Long id) {
+    this.courseService.deleteCourseById(id);
+
+    return "redirect:/painel-controle";
+  }
+
+  // deletar cursos favoritos do usuario logado
+  @GetMapping("/excluir/{id}")
+  public String deleteFavoriteCourse(@PathVariable Long id) {
     var user = this.userService.findUserById(data.DataUser().getId());
     var courses = user.getFavoriteCourses();
 

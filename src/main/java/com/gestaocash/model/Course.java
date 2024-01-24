@@ -15,7 +15,7 @@ public class Course {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(columnDefinition = "VARCHAR(50)")
+  @Column(columnDefinition = "VARCHAR(255)")
   private String nomeCurso;
 
   private String url;
@@ -23,7 +23,7 @@ public class Course {
   private int duracao;
   private int conclusao;
 
-  private boolean concluido; // Campo para indicar se o curso foi concluído
+  private boolean concluido = false; // Campo para indicar se o curso foi concluído
 
   public Course() {
 

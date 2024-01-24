@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <form
+            th:object="${course}"
+            th:action="@{'/cursos/editar/' + ${course.id}}"
+            method="post">
+            <div class="input-wrapper">
+                <label for="">Nome curso</label>
+                <input type="text" th:field="*{nomeCurso}" />
+            </div>
+            <div class="input-wrapper">
+                <label for="">Média para concluir</label>
+                <input type="number" th:field="*{conclusao}" />
+            </div>
+            <div class="input-wrapper">
+                <label for="">Descricao</label>
+                <input type="text" th:field="*{descricao}" />
+            </div>
+            <div class="input-wrapper">
+                <label for="">Duracao</label>
+                <input type="number" th:field="*{duracao}" />
+            </div>
+
+            <div class="input-wrapper">
+                <label for="">url</label>
+                <input type="text" th:field="*{url}" />
+            </div>
+            <button type="submit">Atualizar</button>
+        </form>
+    </body>
+</html>
