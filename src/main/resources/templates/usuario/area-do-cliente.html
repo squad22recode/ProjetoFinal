@@ -19,35 +19,9 @@
 	<section class="section profile container">
 		<!-- Inicio perfil do cliente -->
 		<div class="row justify-content-center mt-3">
-			<div class="col-10 col-md-5 col-lg-4">
+			<div class="col-10 col-md-6 col-lg-6 col-xxl-4">
 
-				<div class="card">
-					<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-					 <!-- <img th:src="@{ ${user.getImagemPerfil != null} ? '/usuario/imagem/' + ${user.getId} : 'https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/user-default.svg'}" alt="Profile" class="rounded-circle"> 
-					 -->
-					 <img th:src="|/usuario/imagem/${user.getId()}|" onerror="this.src='https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/user-default.svg';" alt="Profile" class="rounded-circle"> 
-
-						<h2 th:text="${user.getNome()}"></h2>
-					
-						<h3>Produtos eletrônicos</h3>
-						<button type="button" class="btn btn-primary">
-							<a class="link-offset-2 link-underline link-underline-opacity-0 link-light"
-								href="../usuario/editar">
-
-								Editar
-							</a>
-						</button>
-						<div class="social-links mt-2">
-							<a th:if="${#strings.contains(user.getFacebook(),'facebook')}"
-								th:href="${user.getFacebook()}" class="facebook"><i class="bi bi-facebook"></i></a>
-							<a th:if="${#strings.contains(user.getInstagram(),'instagram')}"
-								th:href="${user.getInstagram()}" class="instagram"><i class="bi bi-instagram"></i></a>
-							<a th:if="${#strings.contains(user.getLinkedin,'linkedin')}" th:href="${user.getLinkedin()}"
-								class="linkedin"><i class="bi bi-linkedin"></i></a>
-						</div>
-					</div>
-				</div>
+				<div th:replace="~{fragments/usuario/card-info-usuario :: card-user}"></div>
 
 			</div>
 		</div>
@@ -62,11 +36,15 @@
 						<li class="nav-item">
 							<button class="nav-link active" data-bs-toggle="tab"
 								data-bs-target="#profile-physical">Pessoa Física</button>
+							<!--			<a href="/usuario/area-cliente" class="nav-link active" data-bs-toggle="tab"
+								data-bs-target="#profile-physical">Pessoa Física</a>-->
 						</li>
 
 						<li class="nav-item">
 							<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-legal">Pessoa
 								Jurídica</button>
+							<!--	<a href="/usuario/area-cliente/empresa" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-legal">Pessoa
+								Jurídica</button>-->
 						</li>
 
 						<li class="nav-item">
@@ -150,7 +128,8 @@
 														<p th:if="date != null" th:text="${date}"><strong></strong></p>
 														<div class="card-body">
 															<h5 class="card-title">Controle financeiro
-																<span th:text="'| ' + ${#strings.replace(dateMonth, '-',' ')}"></span>
+																<span
+																	th:text="'| ' + ${#strings.replace(dateMonth, '-',' ')}"></span>
 															</h5>
 															<span class="btn btn-danger" data-bs-toggle="modal"
 																data-bs-target="#modalDespesa">Adicionar despesa</span>
@@ -191,19 +170,29 @@
 							</section>
 						</div>
 						<!-- Fim navegação pessoa fisica -->
-						
+
 						<!-- Inicio navegação pessoa Juridica -->
 						<div class="tab-pane fade profile-legal pt-3" id="profile-legal">
-	
+
 							<section id="main" class="main">
 								<!-- Modal cadastro da empresa -->
 								<div th:replace="~{fragments/empresa/cadastro-empresa :: register-company}"></div>
+
 								<!-- Modal editar da empresa -->
-								<div th:if="${user.getEmpresa()} != null" th:insert="~{fragments/empresa/edit-empresa :: edit-company}"></div>
+								<div th:if="${user.getEmpresa()} != null"
+									th:insert="~{fragments/empresa/edit-empresa :: edit-company}"></div>
+
+								<!-- Modal cadastro de cliente -->
+								<div th:insert="~{fragments/empresa/add-cliente :: add-client}"></div>
+
 								<div class="pagetitle d-flex justify-content-between">
 									<h1>Pessoa Jurídica</h1>
-									<h5 th:if="${user.getEmpresa()} == null" role="button" data-bs-toggle="modal" data-bs-target="#registerCompanyModal"><i class="bi bi-plus-lg" ></i> Adicionar empresa</h5>
-								 <h5 th:if="${user.getEmpresa()} != null" role="button" data-bs-toggle="modal" data-bs-target="#editCompanyModal"><i class="bi bi-pencil"></i> Editar empresa</h5> 
+									<h5 th:if="${user.getEmpresa()} == null" role="button" data-bs-toggle="modal"
+										data-bs-target="#registerCompanyModal"><i class="bi bi-plus-lg"></i> Adicionar
+										empresa</h5>
+									<h5 th:if="${user.getEmpresa()} != null" role="button" data-bs-toggle="modal"
+										data-bs-target="#editCompanyModal"><i class="bi bi-pencil"></i> Editar empresa
+									</h5>
 								</div>
 
 								<div class="section dashboard">
@@ -250,7 +239,9 @@
 																</div>
 															</div>
 														</div>
-
+														<h5 class="ms-3" role="button" data-bs-toggle="modal"
+															data-bs-target="#addSaleModal"><i class="bi bi-plus-lg"></i>
+															Adicionar Venda</h5>
 													</div>
 												</div><!-- Fim card vendas -->
 
@@ -326,7 +317,7 @@
 																	<i class="bi bi-people"></i>
 																</div>
 																<div class="ps-3">
-																	<h6>150</h6>
+																	<h6 th:text="${#arrays.length(clients)}"></h6>
 																	<span
 																		class="text-danger small pt-1 fw-bold">5%</span>
 																	<span
@@ -336,6 +327,9 @@
 															</div>
 
 														</div>
+														<h5 class="ms-3" role="button" data-bs-toggle="modal"
+															data-bs-target="#addClientModal"><i
+																class="bi bi-plus-lg"></i> Adicionar Cliente</h5>
 													</div>
 
 												</div>
@@ -852,26 +846,27 @@
 								<div class="pagetitle">
 									<h1>Área do conhecimento</h1>
 								</div>
-								<h2  th:if="${favorites.size() > 0}">Cursos favoritos </h2>
-							
+								<h2 th:if="${favorites.size() > 0}">Cursos favoritos </h2>
+
 
 								<main class="row gap-2 ">
 									<div th:each="course: ${favorites}" class="card card-study">
 										<h3 class="card-header" th:text="${course.nomeCurso}"></h3>
 										<div>
-											<p th:text="@{'Duração' + ${course.duracao } + h}"> <i class="bi bi-alarm"></i> </p>
-											<p th:text="@{'Conclusão ' + ${course.conclusao } + ' Dias'}"> ></i> Conclusão dias</p>
+											<p th:text="@{'Duração' + ${course.duracao } + h}"> <i
+													class="bi bi-alarm"></i> </p>
+											<p th:text="@{'Conclusão ' + ${course.conclusao } + ' Dias'}"> ></i>
+												Conclusão dias</p>
 										</div>
 										<p class="card-body" th:text="${course.descricao}"></p>
-										
-								
 
-											<a th:href="${course.url}"
-												class="btn" target="_blanck">Saiba mais</a>
-	
-												<a th:href="@{'/cursos/excluir/' + ${course.id}}"
-												class="btn btn-danger">Remover dos favoritos</a>
-									
+
+
+										<a th:href="${course.url}" class="btn" target="_blanck">Saiba mais</a>
+
+										<a th:href="@{'/cursos/excluir/' + ${course.id}}" class="btn btn-danger">Remover
+											dos favoritos</a>
+
 									</div>
 
 								</main>
@@ -879,7 +874,7 @@
 								<div class="section dashboard">
 									<h2>Cursos indicados</h2>
 									<div class="row gap-2  justify-content-center">
-									
+
 									</div>
 								</div>
 							</section>

@@ -9,10 +9,12 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -24,7 +26,7 @@ public class Client {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(unique = true, columnDefinition = "CHAR(11)")
+  @Column(unique = true, columnDefinition = "varchar(15)")
   private String cpf;
 
   @Column(columnDefinition = "varchar(50)")
@@ -33,7 +35,7 @@ public class Client {
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate dataNascimento;
 
-  @Column(columnDefinition = "varchar(11)")
+  @Column(columnDefinition = "varchar(17)")
   private String telefone;
 
   @Column(unique = true, columnDefinition = "VARCHAR(50)")
@@ -42,8 +44,33 @@ public class Client {
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "endereco_id", referencedColumnName = "id")
   private Address endereco;
+  
+  @JoinColumn(name="empresa_id", foreignKey = @ForeignKey(name = "FKClient"))
+  @ManyToOne
+  private Company empresa;
+  
+  @Column(name="created_at")
+  @DateTimeFormat(iso = ISO.DATE)
+  private LocalDate createdAt;
+  
 
-  public Client() {
+  public LocalDate getCreatedAt() {
+	return createdAt;
+}
+
+public void setCreatedAt(LocalDate createdAt) {
+	this.createdAt = createdAt;
+}
+
+public Company getEmpresa() {
+	return empresa;
+}
+
+public void setEmpresa(Company empresa) {
+	this.empresa = empresa;
+}
+
+public Client() {
 
   }
 

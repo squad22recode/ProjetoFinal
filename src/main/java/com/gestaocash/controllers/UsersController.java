@@ -35,6 +35,7 @@ import com.gestaoCash.enums.CategoryEnum;
 import com.gestaoCash.enums.MonthEnum;
 import com.gestaoCash.enums.StateEnum;
 import com.gestaoCash.model.Address;
+import com.gestaoCash.model.Client;
 import com.gestaoCash.model.Company;
 import com.gestaoCash.model.Course;
 import com.gestaoCash.model.Expense;
@@ -44,6 +45,7 @@ import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.repositories.RevenueRepository;
 import com.gestaoCash.repositories.UserRepository;
+import com.gestaoCash.services.ClientService;
 import com.gestaoCash.services.ExpenseService;
 import com.gestaoCash.services.RevenueService;
 import com.gestaoCash.services.UserService;
@@ -64,6 +66,9 @@ public class UsersController {
 
 	@Autowired
 	ExpenseRespository expRepo;
+	
+	@Autowired
+	private ClientService clientService;
 
 	@Autowired
 	private ExpenseService expenseService;
@@ -146,6 +151,7 @@ public class UsersController {
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		modelAndView.addObject("company", new Company());
+		modelAndView.addObject("client", new Client());
 
 		Users getUser = data.DataUser();
 
@@ -216,8 +222,10 @@ public class UsersController {
 		if (user.getEmpresa() != null) {
 			model.addAttribute("companyEdit", user.getEmpresa());
 		}
-
-		System.out.println(user.getEmpresa());
+		
+		List<Client> clients = clientService.findAllClient().stream().filter(client-> client.getEmpresa().getIdEmpresa() == user.getEmpresa().getIdEmpresa()).collect(Collectors.toList());
+		
+		model.addAttribute("clients", clients);
 		model.addAttribute("totalRevenue", totalRevenue);
 		model.addAttribute("totalExpense", totalExpense);
 		model.addAttribute("data", data);

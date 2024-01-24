@@ -1,5 +1,8 @@
 package com.gestaoCash.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -17,16 +21,16 @@ public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_empresa")
-	public long idEmpresa;
+	private long idEmpresa;
 	
 	@Column(name="nome_empresa", length = 50)
-	public String nomeEmpresa;
+	private String nomeEmpresa;
 	
 	@Column(name="cnpj", length = 18)
-	public String cnpj;
+	private String cnpj;
 	
 	@Column(name="razao_social", length = 50)
-	public String razaoSocial;
+	private String razaoSocial;
 	
 	@OneToOne(mappedBy = "empresa")
 	private Users usuario;
@@ -35,6 +39,39 @@ public class Company {
 	@JoinColumn(name = "endereco_id", referencedColumnName = "id")
 	private AddressCompany enderecoEmpresa;
 	
+	@OneToMany(mappedBy = "empresa", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<RevenueCompany> revenueCompany = new ArrayList<RevenueCompany>();
+		
+	@OneToMany(mappedBy = "empresa", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<Client> client = new ArrayList<Client>();
+	
+	@Column(name="categoria", length = 8)
+	private String category; 
+	
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public List<Client> getClient() {
+		return client;
+	}
+
+	public void setClient(List<Client> client) {
+		this.client = client;
+	}
+
+	public List<RevenueCompany> getRevenueCompany() {
+		return revenueCompany;
+	}
+
+	public void setRevenueCompany(List<RevenueCompany> revenueCompany) {
+		this.revenueCompany = revenueCompany;
+	}
 
 	public AddressCompany getEnderecoEmpresa() {
 		return enderecoEmpresa;

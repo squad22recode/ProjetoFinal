@@ -1,5 +1,6 @@
 package com.gestaoCash.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +16,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.gestaoCash.enums.StateEnum;
 import com.gestaoCash.model.Client;
 import com.gestaoCash.services.ClientService;
+import com.gestaoCash.utils.DataUserAuth;
 
 @Controller
-@RequestMapping("/clientes")
+@RequestMapping("/usuario/area-cliente")
 public class ClientController {
 
   @Autowired
   private ClientService clientService;
+  
+  DataUserAuth data = new DataUserAuth();
 
-  @GetMapping
-  public String listAllClient(Model model) {
-    var clients = this.clientService.findAllClient();
-    model.addAttribute("clientes", clients);
-    model.addAttribute("novoCliente", new Client());
-    model.addAttribute("states", StateEnum.values());
-
-    return "cliente/listar";
-  }
+//  @GetMapping
+//  public String listAllClient(Model model) {
+//    var clients = this.clientService.findAllClient();
+//    model.addAttribute("clientes", clients);
+//    model.addAttribute("novoCliente", new Client());
+//    model.addAttribute("states", StateEnum.values());
+//
+//    return "cliente/listar";
+//  }
 
   // @GetMapping("/novo")
   // public String showForm(Model model) {
@@ -40,11 +44,14 @@ public class ClientController {
   // return "cliente/formulario";
   // }
 
-  @PostMapping("/cadastro")
-  public String saveClient(@ModelAttribute("novoCliente") Client client) {
-    this.clientService.saveClient(client);
+  @PostMapping("/cadastrar-cliente")
+  public String saveClient(@ModelAttribute("client") Client client) {
+	client.setEmpresa(data.DataUser().getEmpresa());  
+	client.setCreatedAt(LocalDate.now());
+	
+    clientService.saveClient(client);
 
-    return "redirect:/clientes";
+    return "redirect:/usuario/area-cliente";
   }
 
   @GetMapping("/editar/{id}")
