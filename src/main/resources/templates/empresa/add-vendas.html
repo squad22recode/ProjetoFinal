@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+
+<head th:replace="~{fragments/head :: head (title='GestãoCash | Cadastrar vendas')}">
+
+	<!-- imports css -->
+
+</head>
+
+
+
+<body>
+	<!-- Inicio header -->
+	<div th:replace="~{fragments/header :: header}"></div>
+	<!-- fim header -->
+
+	<div class="container">
+		<div class="card mt-5 p-5">
+			<div class="card-header">
+				<h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Venda</h1>
+			</div>
+
+			<div class="card-body mt-5">
+				<form class="row g-3" method="post" th:action="@{/usuario/area-cliente/cadastrar-venda}"
+					th:object="${sale}">
+					<input type="hidden" id="products" name="products" th:field="*{produtos}" />
+					<!-- <div class="col-md-4">
+							<label for="inputRazaoSocial" class="form-label">Data</label>
+							<input type="date" class="form-control" id="inputData" name="inputData" th:field="*{data}"/>
+						</div> -->
+					<div class="col-md-4">
+						<label for="inputClient" class="form-label">Cliente</label>
+						<select id="inputClient" name="inputClient" class="form-select dataProduct"
+							th:field="*{cliente}">
+							<option value="">Selecione o cliente</option>
+							<option th:each="client: ${clients}" th:text="${client.getNome()}" th:value="${client.getId()}">
+							</option>
+						</select>
+
+					</div>
+					<div class="col-md-4">
+						<label for="inputDesconto" class="form-label dataDesconto">Desconto, se tiver</label>
+						<input type="tel" min="0" class="form-control" id="inputDesconto" name="inputDesconto"
+							th:field="*{desconto}" />
+
+					</div>
+					<div class="vazia"></div>
+					<div class="row mt-2 divClone">
+						<h5>Adicionar produtos</h5>
+						<div class="col-md-3">
+							<label for="inputProduct" class="form-label">Produto</label>
+							<select id="inputProduct" name="inputProduct" class="form-select dataProduct">
+								<option value="">Selecione o produto</option>
+								<option th:each="product: ${products}" th:text="${product.getNome()}"
+									th:value="${'id: ' + product.getId() + ': produto:' + product.getNome()}"></option>
+							</select>
+						</div>
+						<div class="col-md-2">
+							<label for="inputQuantidade" class="form-label">Quantidade</label>
+							<input type="number" min="1" class="form-control dataQuant" id="inputQuantidade"
+								name="inputQuantidade" />
+						</div>
+						<div class="col-md-4">
+							<label for="inputAddress2" class="form-label dataPreco">Preço unidade</label>
+							<input type="number" step="0.01" min="0" class="form-control" id="inputPreco"
+								name="inputPreco" />
+						</div>
+
+						<button type="button" class="btn btn-primary col-md-1 align-self-end"
+							onclick="addElement(event)" title="adicionar produto"><i
+								class="bi bi-plus-lg"></i></button>
+
+
+					</div>
+					<div class="col-12 my-2">
+						<button type="submit" class="btn btn-primary">
+							Cadastrar Venda
+						</button>
+					</div>
+				</form>
+
+
+			</div>
+		</div>
+	</div>
+	<script>
+		
+		let json = []
+		function addElement(event) {
+
+			const div = document.querySelector('.vazia');
+			const produto = document.getElementById('inputProduct');
+			const quantidade = document.getElementById('inputQuantidade');
+			const preco = document.getElementById('inputPreco');
+			const produtos = document.getElementById('products')
+					
+			
+			/*let json = "";
+			json = `{"id":"${produto.value.split(':')[1].trim()}", "nome":"${produto.value.split(':')[3]}","quantidade":"${quantidade.value}", "preco":"${preco.value}"}`
+				console.log(JSON.stringify(json));
+				*/
+				
+				
+				json.push({id:produto.value.split(':')[1].trim(), nome:produto.value.split(':')[3],quantidade:quantidade.value, custo:preco.value});
+				
+				
+			div.innerHTML += `<ul class="list-group list-group-horizontal mt-2">
+  				<li class="list-group-item">${produto.value.split(":")[3]}</li>
+  				<li class="list-group-item">quantidade: ${quantidade.value}</li>
+  				<li class="list-group-item">preço: ${preco.value}</li>
+	</ul>`
+
+		produtos.value = JSON.stringify(json)
+		}
+	</script>
+</body>
+
+</html>

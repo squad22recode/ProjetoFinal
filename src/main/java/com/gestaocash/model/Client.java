@@ -1,6 +1,8 @@
 package com.gestaoCash.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -49,12 +52,24 @@ public class Client {
   @ManyToOne
   private Company empresa;
   
+  @OneToMany(mappedBy = "cliente", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<Sale> sale = new ArrayList<Sale>();
+  
   @Column(name="created_at")
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate createdAt;
   
+  
 
-  public LocalDate getCreatedAt() {
+  public List<Sale> getSale() {
+	return sale;
+}
+
+public void setSale(List<Sale> sale) {
+	this.sale = sale;
+}
+
+public LocalDate getCreatedAt() {
 	return createdAt;
 }
 

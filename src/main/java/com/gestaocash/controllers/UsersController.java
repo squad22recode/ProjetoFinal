@@ -39,19 +39,24 @@ import com.gestaoCash.model.Client;
 import com.gestaoCash.model.Company;
 import com.gestaoCash.model.Course;
 import com.gestaoCash.model.Expense;
+import com.gestaoCash.model.Product;
 import com.gestaoCash.model.Revenue;
+import com.gestaoCash.model.Sale;
 import com.gestaoCash.model.Users;
 import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.ExpenseRespository;
+import com.gestaoCash.repositories.ProductRepository;
 import com.gestaoCash.repositories.RevenueRepository;
 import com.gestaoCash.repositories.UserRepository;
 import com.gestaoCash.services.ClientService;
 import com.gestaoCash.services.ExpenseService;
+import com.gestaoCash.services.ProductService;
 import com.gestaoCash.services.RevenueService;
 import com.gestaoCash.services.UserService;
 import com.gestaoCash.utils.DataUserAuth;
 import com.gestaoCash.utils.SenhaUtils;
 
+import dto.SaleDto;
 import jakarta.websocket.server.PathParam;
 
 @Controller
@@ -75,6 +80,9 @@ public class UsersController {
 
 	@Autowired
 	private RevenueService revenueService;
+	
+	@Autowired
+	private ProductService prodService;
 
 	DataUserAuth data = new DataUserAuth();
 
@@ -150,13 +158,10 @@ public class UsersController {
 		modelAndView.addObject("states", StateEnum.values());
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
-		modelAndView.addObject("company", new Company());
-		modelAndView.addObject("client", new Client());
-
-		Users getUser = data.DataUser();
+		
 
 		// String img = getUser.getImagemPerfil() + ":image/png;base64," + conver;
-		Long id = getUser.getId();
+		Long id = data.DataUser().getId();
 
 		// Image img = new ImageIcon(getUser.getImagemPerfil()).getImage();
 		// model.addAttribute("img", img);
@@ -216,16 +221,8 @@ public class UsersController {
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
 		Users user = userService.findUserById(id);
 		model.addAttribute("user", user);
-
 		model.addAttribute("favorites", user.getFavoriteCourses());
-
-		if (user.getEmpresa() != null) {
-			model.addAttribute("companyEdit", user.getEmpresa());
-		}
 		
-		List<Client> clients = clientService.findAllClient().stream().filter(client-> client.getEmpresa().getIdEmpresa() == user.getEmpresa().getIdEmpresa()).collect(Collectors.toList());
-		
-		model.addAttribute("clients", clients);
 		model.addAttribute("totalRevenue", totalRevenue);
 		model.addAttribute("totalExpense", totalExpense);
 		model.addAttribute("data", data);

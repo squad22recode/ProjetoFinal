@@ -45,9 +45,20 @@ public class Company {
 	@OneToMany(mappedBy = "empresa", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Client> client = new ArrayList<Client>();
 	
+	@OneToMany(mappedBy = "empresa", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<Product> product = new ArrayList<Product>();
+	
 	@Column(name="categoria", length = 8)
 	private String category; 
 	
+
+	public List<Product> getProduct() {
+		return product;
+	}
+
+	public void setProduct(List<Product> product) {
+		this.product = product;
+	}
 
 	public String getCategory() {
 		return category;
