@@ -46,9 +46,9 @@ public class CourseController {
   // }
 
   @PostMapping("/novo")
-  public String saveCourse(@ModelAttribute("course") Course course) {
+  public String saveCourse(@ModelAttribute("newCourse") Course course) {
     this.courseService.saveCourse(course);
-    return "redirect:/painel-controle";
+    return "redirect:/painel-controle/curso";
   }
 
   // metodo para salvar cursos favoritos do usuario logado
@@ -90,14 +90,14 @@ public class CourseController {
   public String updateCourse(@ModelAttribute("course") Course updatedCourse, @PathVariable Long id) {
     this.courseService.updateCourseById(id, updatedCourse);
 
-    return "redirect:/painel-controle";
+    return "redirect:/painel-controle/curso";
   }
 
   @GetMapping("/delete/{id}")
   public String deleteCourse(@PathVariable Long id) {
     this.courseService.deleteCourseById(id);
 
-    return "redirect:/painel-controle";
+    return "redirect:/painel-controle/curso";
   }
 
   // deletar cursos favoritos do usuario logado

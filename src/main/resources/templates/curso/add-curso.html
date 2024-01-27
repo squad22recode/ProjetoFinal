@@ -11,22 +11,18 @@
     <body>
         <div>
             <div class="container-fluid">
-                <div class="row flex-nowrap">
+                <div class="row flex-nowrap w-auto overflow-hidden">
                     <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
                         <div
                             class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 logo-d">
-                            <a
-                                href="/"
-                                class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                                <img
-                                    src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png"
-                                    class="logo-img"
-                                    alt="logo gestãocash" />
-                            </a>
+                            <img
+                                src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png"
+                                class="logo-img"
+                                alt="logo gestãocash" />
                             <ul
                                 class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start menu"
                                 id="menu">
-                                <li class="nav-item act">
+                                <li class="nav-item">
                                     <a
                                         href="/painel-controle"
                                         class="nav-link align-middle px-0">
@@ -47,15 +43,16 @@
                                         >
                                     </a>
                                 </li>
+                                <li></li>
 
-                                <li>
+                                <li class="act">
                                     <a
                                         href="#submenu3"
                                         data-bs-toggle="collapse"
                                         class="nav-link px-0 align-middle">
                                         <i class="fs-4 bi-grid"></i>
                                         <span class="ms-1 d-none d-sm-inline"
-                                            >Curso</span
+                                            >Cursos</span
                                         >
                                     </a>
                                     <ul
@@ -133,7 +130,99 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col py-3"></div>
+                    <div
+                        class="col px-0 py-5 px-5 d-flex justify-content-center">
+                        <main>
+                            <h2>Cadastrar curso</h2>
+                            <div class="container-form">
+                                <form
+                                    th:action="@{/cursos/novo}"
+                                    th:object="${newCourse}"
+                                    method="post">
+                                    <div
+                                        data-mdb-input-init
+                                        class="form-outline mb-4">
+                                        <label
+                                            class="form-label"
+                                            for="form4Example1"
+                                            >Nome curso</label
+                                        >
+                                        <input
+                                            type="text"
+                                            id="form4Example1"
+                                            class="form-control"
+                                            th:field="*{nomeCurso}" />
+                                    </div>
+
+                                    <div
+                                        data-mdb-input-init
+                                        class="form-outline mb-4">
+                                        <label
+                                            class="form-label"
+                                            for="form4Example2"
+                                            >Media para concluir</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="form4Example2"
+                                            class="form-control"
+                                            th:field="*{conclusao}" />
+                                    </div>
+                                    <div
+                                        data-mdb-input-init
+                                        class="form-outline mb-4">
+                                        <label
+                                            class="form-label"
+                                            for="form4Example2"
+                                            >Descrição</label
+                                        >
+                                        <input
+                                            type="text"
+                                            id="form4Example2"
+                                            class="form-control"
+                                            th:field="*{descricao}" />
+                                    </div>
+
+                                    <div
+                                        data-mdb-input-init
+                                        class="form-outline mb-4">
+                                        <label
+                                            class="form-label"
+                                            for="form4Example2"
+                                            >Duração</label
+                                        >
+                                        <input
+                                            type="text"
+                                            id="form4Example2"
+                                            class="form-control"
+                                            th:field="*{duracao}" />
+                                    </div>
+                                    <div
+                                        data-mdb-input-init
+                                        class="form-outline mb-4">
+                                        <label
+                                            class="form-label"
+                                            for="form4Example2"
+                                            >url</label
+                                        >
+                                        <input
+                                            type="text"
+                                            id="form4Example2"
+                                            class="form-control"
+                                            th:field="*{url}" />
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button
+                                        data-mdb-ripple-init
+                                        type="submit"
+                                        class="btn btn-primary btn-block mb-4">
+                                        Cadastrar
+                                    </button>
+                                </form>
+                            </div>
+                        </main>
+                    </div>
                 </div>
             </div>
             <!--  -->

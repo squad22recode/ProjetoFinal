@@ -11,22 +11,18 @@
     <body>
         <div>
             <div class="container-fluid">
-                <div class="row flex-nowrap">
+                <div class="row flex-nowrap w-auto overflow-hidden">
                     <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
                         <div
                             class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 logo-d">
-                            <a
-                                href="/"
-                                class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                                <img
-                                    src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png"
-                                    class="logo-img"
-                                    alt="logo gestãocash" />
-                            </a>
+                            <img
+                                src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png"
+                                class="logo-img"
+                                alt="logo gestãocash" />
                             <ul
                                 class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start menu"
                                 id="menu">
-                                <li class="nav-item act">
+                                <li class="nav-item">
                                     <a
                                         href="/painel-controle"
                                         class="nav-link align-middle px-0">
@@ -47,15 +43,16 @@
                                         >
                                     </a>
                                 </li>
+                                <li></li>
 
-                                <li>
+                                <li class="act">
                                     <a
                                         href="#submenu3"
                                         data-bs-toggle="collapse"
                                         class="nav-link px-0 align-middle">
                                         <i class="fs-4 bi-grid"></i>
                                         <span class="ms-1 d-none d-sm-inline"
-                                            >Curso</span
+                                            >Cursos</span
                                         >
                                     </a>
                                     <ul
@@ -63,9 +60,7 @@
                                         id="submenu3"
                                         data-bs-parent="#menu">
                                         <li class="w-100">
-                                            <a
-                                                href="/painel-controle/curso"
-                                                class="nav-link px-0">
+                                            <a href="#" class="nav-link px-0">
                                                 Listar</a
                                             >
                                         </li>
@@ -133,7 +128,69 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col py-3"></div>
+                    <div class="col px-0 py-5 px-5">
+                        <div class="container-table">
+                            <!-- <header
+                                class="header-client bg-dark d-flex justify-content-between p-4">
+                                <h4 class="text-white fw-bold">
+                                    Gerenciamento de cursos
+                                </h4>
+                                <div>
+                                    <a
+                                        class="btn btn-danger disabled fw-bold"
+                                        id="btn-deletes"
+                                        disabled
+                                        ><i
+                                            class="fa-solid fa-circle-minus"></i>
+                                        Deletar</a
+                                    >
+                                    <a
+                                        class="btn btn-success fw-bold"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalNovoCliente"
+                                        ><i class="fa-solid fa-circle-plus"></i>
+                                        Adicionar novo</a
+                                    >
+                                </div>
+                            </header> -->
+                            <div class="wrapper-table d-flex">
+                                <table class="">
+                                    <thead class="">
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Descricao</th>
+                                            <th>Url</th>
+                                            <th>Duracao</th>
+                                            <th>Tempo p/ concluir</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody">
+                                        <tr th:each="c: ${courses}">
+                                            <td th:text="${c.nomeCurso}"></td>
+                                            <td th:text="${c.descricao}"></td>
+                                            <td th:text="${c.url}"></td>
+                                            <td th:text="${c.duracao}"></td>
+                                            <td th:text="${c.conclusao}"></td>
+                                            <td>
+                                                <a
+                                                    th:href="@{'/cursos/editar/' + ${c.id}}"
+                                                    class="edit"
+                                                    >Editar</a
+                                                >
+                                                |
+                                                <a
+                                                    th:href="@{'/cursos/delete/' + ${c.id}}"
+                                                    class="delete"
+                                                    >Excluir</a
+                                                >
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--  -->
