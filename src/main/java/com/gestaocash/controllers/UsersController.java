@@ -307,13 +307,15 @@ public class UsersController {
 		Long id = data.DataUser().getId();
 		Users user = userService.findUserById(id);
 
-		try {
-			if (file != null) {
+		System.out.println("-----------------------------------------");
 
-				editUser.setImagemPerfil(file.getBytes());
+		try {
+			if (file.isEmpty()) {
+
+				editUser.setImagemPerfil(user.getImagemPerfil());
 
 			} else {
-				editUser.setImagemPerfil(user.getImagemPerfil());
+				editUser.setImagemPerfil(file.getBytes());
 			}
 
 		} catch (IOException e) {
