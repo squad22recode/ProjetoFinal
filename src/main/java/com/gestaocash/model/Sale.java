@@ -2,7 +2,9 @@ package com.gestaoCash.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -34,17 +36,30 @@ public class Sale {
 	@ManyToOne
 	private Client cliente;
 	
+	@JoinColumn(name="empresa_id", foreignKey = @ForeignKey(name = "FKCompanySale"))
+	  @ManyToOne
+	  private Company empresa;
+	
 //	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinTable(name = "produto_venda", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "id_venda"))
-//	private List<Product> produtos = new ArrayList<>();
+//	@JoinTable(name = "produto_venda", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "venda_id"))
+//	List<Product> produtos = new ArrayList<>();
 	
-	@Column(columnDefinition = "json")
-	private String produtos;
+//	@OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.PERSIST)
+//	 @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+//	private List<Product> produtos;
 	
+//	@Column(columnDefinition = "json")
+//	private String produtos;
+	
+	@DateTimeFormat(iso = ISO.DATE)
+	private LocalDate data;
 	
 	private double valorTotal;
 	private int desconto;
 	
+
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+	private List<ItemSale> itemSale;
 	
 	public long getId() {
 		return id;
@@ -53,12 +68,12 @@ public class Sale {
 		this.id = id;
 	}
 	
-	public String getProdutos() {
-		return produtos;
-	}
-	public void setProdutos(String produtos) {
-		this.produtos = produtos;
-	}
+//	public String getProdutos() {
+//		return produtos;
+//	}
+//	public void setProdutos(String produtos) {
+//		this.produtos = produtos;
+//	}
 	
 	public double getValorTotal() {
 		return valorTotal;
@@ -72,17 +87,48 @@ public class Sale {
 	public void setDesconto(int desconto) {
 		this.desconto = desconto;
 	}
-	@Override
-	public String toString() {
-		return "Sale [id=" + id + ", produtos=" + produtos + ", valorTotal=" + valorTotal
-				+ ", desconto=" + desconto + "]";
-	}
+	
 	public Client getCliente() {
 		return cliente;
 	}
 	public void setCliente(Client cliente) {
 		this.cliente = cliente;
 	}
+	
+	public LocalDate getData() {
+	return data;
+}
+
+public void setData(LocalDate data) {
+	this.data = data;
+}
+
+public Company getEmpresa() {
+	return empresa;
+}
+public void setEmpresa(Company empresa) {
+	this.empresa = empresa;
+}
+public List<ItemSale> getItemSale() {
+	return itemSale;
+}
+public void setItemSale(List<ItemSale> itemSale) {
+	this.itemSale = itemSale;
+}
+//public List<Product> getProdutos() {
+//	return produtos;
+//}
+//public void setProdutos(List<Product> produtos) {
+//	this.produtos = produtos;
+//}
+@Override
+public String toString() {
+	return "Sale [id=" + id + ", cliente=" + cliente + ", empresa=" + empresa + ", data=" + data + ", valorTotal="
+			+ valorTotal + ", desconto=" + desconto + ", itemSale=" + itemSale + "]";
+}
+
+
+
 	
 //	
 //	private int quantidade;
@@ -95,8 +141,7 @@ public class Sale {
 //	@ManyToOne
 //	private Client cliente;
 //	
-//	@DateTimeFormat(iso = ISO.DATE)
-//	private LocalDate data;
+
 //
 //	public long getId() {
 //		return id;
@@ -122,13 +167,6 @@ public class Sale {
 //		this.valor = valor;
 //	}
 //
-//	public List<Product> getProduto() {
-//		return produto;
-//	}
-//
-//	public void setProduto(List<Product> produto) {
-//		this.produto = produto;
-//	}
 //
 //	public Client getCliente() {
 //		return cliente;
@@ -138,13 +176,7 @@ public class Sale {
 //		this.cliente = cliente;
 //	}
 //
-//	public LocalDate getData() {
-//		return data;
-//	}
-//
-//	public void setData(LocalDate data) {
-//		this.data = data;
-//	}
+
 //	
 	
 }

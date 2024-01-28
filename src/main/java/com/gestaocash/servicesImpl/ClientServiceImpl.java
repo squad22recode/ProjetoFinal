@@ -1,12 +1,16 @@
 package com.gestaoCash.servicesImpl;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gestaoCash.model.Client;
+import com.gestaoCash.model.Company;
 import com.gestaoCash.repositories.ClientRepository;
 import com.gestaoCash.services.ClientService;
 
@@ -46,16 +50,6 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public void updateClientById(Long id, Client uptatedClient) {
-    // var client = this.clientRepository.findById(id).orElse(null);
-
-    // if (client != null) {
-
-    // }
-    this.clientRepository.save(uptatedClient);
-  }
-
-  @Override
   public void deleteClientById(Long id) {
     this.clientRepository.deleteById(id);
   }
@@ -64,5 +58,38 @@ public class ClientServiceImpl implements ClientService {
   public void deleteAllClientsById(List<Long> ids) {
     this.clientRepository.deleteAllById(ids);
   }
+
+@Override
+public List<Client> finAllClientByCompany(Company company, String filter) {
+	return this.filter(filter, clientRepository.findAllClientByEmpresa(company));
+}
+
+@Override
+public int countClient(Company company,String filter) {
+	List<Client> clients = clientRepository.findAllClientByEmpresa(company);
+		
+	clients = this.filter(filter, clients);
+	
+	return clients.size();
+}
+
+public List<Client> filter(String filter, List<Client> clients){
+	
+	if(filter.equalsIgnoreCase("mes")) {
+		clients = clients.stream().filter(client->client.getCreatedAt().getMonth() == LocalDate.now().getMonth() && client.getCreatedAt().getYear() == LocalDate.now().getYear()).collect(Collectors.toList());
+	}else if(filter.equalsIgnoreCase("ano")) {
+		clients = clients.stream().filter(client->client.getCreatedAt().getYear() == LocalDate.now().getYear()).collect(Collectors.toList());
+	}else if(filter.equalsIgnoreCase("hoje")) {
+		clients = clients.stream().filter(client->client.getCreatedAt().isEqual(LocalDate.now()) ).collect(Collectors.toList());
+	}
+	
+	return clients;
+}
+
+@Override
+public List<Client> finAllClientByCompany(Company company, Pageable pageable, String filter) {
+	// TODO Auto-generated method stub
+	return this.filter(filter, clientRepository.findAllClientByEmpresa(company,pageable));
+}
 
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,13 +47,30 @@ public class ClientController {
   // }
 
   @PostMapping("/cadastrar-cliente")
-  public String saveClient(@ModelAttribute("client") Client client) {
-	client.setEmpresa(data.DataUser().getEmpresa());  
-	client.setCreatedAt(LocalDate.now());
-	
-    clientService.saveClient(client);
+  public String saveClient(@ModelAttribute("client") @Validated Client client,BindingResult bindingResult, Model model) {
+	  
+	  if (bindingResult.hasErrors()) {
+	        // Se houver erros de validação, retorne o modal com mensagens de erro
+	        model.addAttribute("errorMessage", "Erro ao cadastrar o cliente. Por favor, corrija os campos destacados.");
+	        return "addClientModal :: modal-content";  // Retorne apenas o conteúdo do modal, não a página inteira
+	    }
+	  try {
+	        // Configurar a empresa e a data de criação
+	        client.setEmpresa(data.DataUser().getEmpresa());
+	        client.setCreatedAt(LocalDate.now());
 
-    return "redirect:/usuario/area-cliente";
+	        // Salvar o cliente no banco de dados
+	        clientService.saveClient(client);
+
+	        // Mensagem de sucesso
+	        model.addAttribute("successMessage", "Cliente cadastrado com sucesso!");
+
+	        return "redirect:/usuario/area-cliente/empresa";
+	    } catch (Exception e) {
+	       
+	        model.addAttribute("errorMessage", "Erro ao cadastrar o cliente. Por favor, tente novamente.");
+	        return "addClientModal :: modal-content";  // Retorne apenas o conteúdo do modal, não a página inteira
+	    }
   }
 
   @GetMapping("/editar/{id}")
@@ -64,7 +83,7 @@ public class ClientController {
 
   @PostMapping("/editar/{id}")
   public String updateClient(@ModelAttribute("editarCliente") Client updatedClient, @PathVariable Long id) {
-    this.clientService.updateClientById(id, updatedClient);
+    this.clientService.saveClient(updatedClient);
 
     return "redirect:/clientes";
   }
