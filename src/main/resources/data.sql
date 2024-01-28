@@ -1,4 +1,4 @@
-SET NAMES utf8mb4;
+/*SET NAMES utf8mb4;
 
 
 INSERT INTO role (authority) VALUES ('ROLE_COMUM');
@@ -16,3 +16,4 @@ VALUES
   ('Marketing digital para sua empresa: reforçando sua presença', '6', '15', 'Saiba como impulsionar os resultados do seu negócio através do marketing digital.', 'https://www.sebrae.com.br/sites/PortalSebrae/cursosonline/marketing-digital-para-sua-empresa-reforcando-sua-presenca,c0c7125576a4e710VgnVCM100000d701210aRCRD', 0),
   ('Como comprar bem e de bons fornecedores', 2, 15, 'Aprenda estratégias valiosas para comprar bem, adquirir insumos de qualidade e obter preços e prazos favoráveis aos pagamentos, aumentando a lucratividade dos seus negócios.', 'https://www.sebrae.com.br/sites/PortalSebrae/cursosonline/como-comprar-bem-e-de-bons-fornecedores,0101b8a6a28bb610VgnVCM1000004c00210aRCRD', 0),
   ('Gestão de sua loja virtual em marketplace', 2, 15, 'Ensinará ao participante quais são os principais aspectos da gestão de uma loja virtual em marketplaces, bem como seus indicadores e ferramentas oferecidas pelas operadoras de marketplaces.', 'https://www.sebrae.com.br/sites/PortalSebrae/cursosonline/como-melhorar-a-gestao-de-sua-loja-virtual-em-marketplace,0f9beb34f5193710VgnVCM1000004c00210aRCRD', 0);
+*/
