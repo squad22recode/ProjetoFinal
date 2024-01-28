@@ -56,6 +56,8 @@ public class CourseServiceImpl implements CourseService {
       course.setNomeCurso(updatedCourse.getNomeCurso());
       course.setDescricao(updatedCourse.getDescricao());
       course.setUrl(updatedCourse.getUrl());
+      course.setConclusao(updatedCourse.getConclusao());
+      course.setDuracao(updatedCourse.getDuracao());
     } else {
       throw new EntityNotFoundException();
     }

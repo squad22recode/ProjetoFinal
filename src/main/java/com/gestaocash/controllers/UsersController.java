@@ -41,14 +41,16 @@ import com.gestaoCash.model.Course;
 import com.gestaoCash.model.Expense;
 import com.gestaoCash.model.Product;
 import com.gestaoCash.model.Revenue;
-import com.gestaoCash.model.Sale;
+import com.gestaoCash.model.Role;
 import com.gestaoCash.model.Users;
 import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.ExpenseRespository;
 import com.gestaoCash.repositories.ProductRepository;
 import com.gestaoCash.repositories.RevenueRepository;
+import com.gestaoCash.repositories.RoleRepository;
 import com.gestaoCash.repositories.UserRepository;
 import com.gestaoCash.services.ClientService;
+import com.gestaoCash.services.CourseService;
 import com.gestaoCash.services.ExpenseService;
 import com.gestaoCash.services.ProductService;
 import com.gestaoCash.services.RevenueService;
@@ -67,11 +69,17 @@ public class UsersController {
 	private UserService userService;
 
 	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
 	UserRepository userepo;
 
 	@Autowired
 	ExpenseRespository expRepo;
-	
+
+	@Autowired
+	private CourseService courseService;
+
 	@Autowired
 	private ClientService clientService;
 
@@ -135,6 +143,16 @@ public class UsersController {
 		user.setSenha(senhaEncriptada);
 		user.setTipoUsuario("user");
 
+		Role role = this.roleRepository.findByAuthority("ROLE_COMUM");
+
+		if (role == null) {
+			throw new IllegalStateException("'ROLE_COMUM' não encontrada");
+		}
+		Set<Role> roles = new HashSet<>();
+		roles.add(role);
+
+		user.setRoles(roles);
+
 		userService.saveUser(user);
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		return modelAndView;
@@ -156,6 +174,7 @@ public class UsersController {
 			@RequestParam(required = false, name = "date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		modelAndView.addObject("states", StateEnum.values());
+		modelAndView.addObject("courses", this.courseService.findAllCourse());
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		
@@ -282,13 +301,15 @@ public class UsersController {
 		Long id = data.DataUser().getId();
 		Users user = userService.findUserById(id);
 
-		try {
-			if (file != null) {
+		System.out.println("-----------------------------------------");
 
-				editUser.setImagemPerfil(file.getBytes());
+		try {
+			if (file.isEmpty()) {
+
+				editUser.setImagemPerfil(user.getImagemPerfil());
 
 			} else {
-				editUser.setImagemPerfil(user.getImagemPerfil());
+				editUser.setImagemPerfil(file.getBytes());
 			}
 
 		} catch (IOException e) {

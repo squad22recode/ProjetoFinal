@@ -52,6 +52,14 @@ public class Users {
 	@JoinTable(name = "favoriteCourses", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
 	private Set<Course> favoriteCourses = new HashSet<>();
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	public Users() {
+
+	}
+
 	// pode ser unidirecional ou bidirecional
 	// um usuario (essa classe) pode ter varias despesas (set<Expense> expenses)
 	// @OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
@@ -79,7 +87,7 @@ public class Users {
 	@Column(columnDefinition = "VARCHAR(60)")
 	private String senha;
 
-	@Column(columnDefinition = "VARCHAR(5)")
+	@Column(columnDefinition = "VARCHAR(10)")
 	private String tipoUsuario;
 
 	@Column(columnDefinition = "CHAR(14)")
@@ -250,6 +258,14 @@ public class Users {
 				+ cpf + ", nome=" + nome + ", dataNascimento=" + dataNascimento + ", telefone=" + telefone + ", email="
 				+ email + ", imagemPerfil=" + Arrays.toString(imagemPerfil) + ", sexo=" + sexo + ", facebook="
 				+ facebook + ", linkedin=" + linkedin + ", instagram=" + instagram + "]";
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 }

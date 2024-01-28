@@ -1,13 +1,21 @@
 package com.gestaoCash.servicesImpl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.hibernate.mapping.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gestaoCash.model.Role;
 import com.gestaoCash.model.Users;
 import com.gestaoCash.repositories.AddressRepository;
 import com.gestaoCash.repositories.UserRepository;
@@ -25,8 +33,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void saveUser(Users user) {
-	  
-	  
+
     this.userRepository.save(user);
   }
 
@@ -59,16 +66,44 @@ public class UserServiceImpl implements UserService {
     this.userRepository.deleteById(id);
   }
 
-@Override
-public Optional<Users> findByEmail(String email) {
-	// TODO Auto-generated method stub
-	return Optional.empty();
-}
+  @Override
+  public Optional<Users> findByEmail(String email) {
+    // TODO Auto-generated method stub
+    return Optional.empty();
+  }
 
-//@Override
-//public Users findByUserEmail(String email) {
-//	// TODO Auto-generated method stub
-//	return userRepository.findByUserEmail(email);
-//}
+  // @Override
+  // public UserDetails loadUserByUsername(String username) throws
+  // UsernameNotFoundException {
+
+  // var user = this.userRepository.findByEmail(username);
+
+  // if (user != null && user.isPresent()) {
+  // var userd = new Users();
+  // userd.setEmail(user.get().getEmail());
+  // userd.setSenha((user.get().getSenha()));
+  // userd.setRoles((java.util.Set<Role>)
+  // mapRolesTAuthorities(user.get().getRoles()));
+
+  // return (UserDetails) userd;
+  // } else {
+  // throw new UsernameNotFoundException("username ou senha inválidos");
+  // }
+  // }
+
+  // private Collection<? extends GrantedAuthority>
+  // mapRolesTAuthorities(Collection<Role> roles) {
+  // Collection<? extends GrantedAuthority> mapRoles = roles.stream()
+  // .map(role -> new
+  // SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
+
+  // return mapRoles;
+  // }
+
+  // @Override
+  // public Users findByUserEmail(String email) {
+  // // TODO Auto-generated method stub
+  // return userRepository.findByUserEmail(email);
+  // }
 
 }

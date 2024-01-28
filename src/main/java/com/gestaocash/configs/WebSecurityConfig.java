@@ -19,59 +19,54 @@ import com.gestaoCash.model.Users;
 import com.gestaoCash.services.UserDetailsServiceImpl;
 import com.gestaoCash.services.UserService;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-	
-	
-	
+
 	@Autowired
 	public UserDetailsServiceImpl userDetailsServiceImpl;
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();    
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
 	SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
-		
+
 		return http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(
-						authorizeConfig -> {
-							
-							authorizeConfig.requestMatchers("/").permitAll();
-                            authorizeConfig.requestMatchers("usuario/cadastro").permitAll();
-                            authorizeConfig.requestMatchers("fragments/*").permitAll();
-							authorizeConfig.requestMatchers("sobre.html").permitAll();
-							authorizeConfig.requestMatchers("contato.html").permitAll();
-							authorizeConfig.requestMatchers("duvidas.html").permitAll();
-							authorizeConfig.requestMatchers("usuario/entrar").permitAll();
-							authorizeConfig.requestMatchers("/assets/images/*").permitAll();
-							authorizeConfig.requestMatchers("/assets/styles/*").permitAll();
-							authorizeConfig.requestMatchers("/assets/scripts/*").permitAll();
-							authorizeConfig.requestMatchers("/css/*").permitAll();
-							authorizeConfig.requestMatchers("/painel-controle").hasAuthority("ADMIN");
-							authorizeConfig.anyRequest().authenticated();
-							
-						}
-						)
+						authorizeConfig -> authorizeConfig
+								.requestMatchers("/").permitAll()
+								.requestMatchers("usuario/cadastro").permitAll()
+								.requestMatchers("fragments/*").permitAll()
+								.requestMatchers("sobre.html").permitAll()
+								.requestMatchers("contato.html").permitAll()
+								.requestMatchers("duvidas.html").permitAll()
+								.requestMatchers("usuario/entrar").permitAll()
+								.requestMatchers("/assets/images/*").permitAll()
+								.requestMatchers("/assets/styles/*").permitAll()
+								.requestMatchers("/assets/scripts/*").permitAll()
+								.requestMatchers("/css/*").permitAll()
+								.requestMatchers("/painel-controle/**").hasRole("ADMIN")
+								.anyRequest().authenticated()
+
+				)
 				.formLogin(form -> form
-				.loginPage("/login")
-				.loginProcessingUrl("/login")
-				.defaultSuccessUrl("/usuario/area-cliente")
-				.permitAll())
+						.loginPage("/login")
+						.loginProcessingUrl("/login")
+						.defaultSuccessUrl("/usuario/area-cliente")
+						.permitAll())
 				.logout(logout -> logout
 						.permitAll()
 						.logoutSuccessUrl("/"))
 				.build();
-		
+
 	}
-	
+
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
-		.userDetailsService(userDetailsServiceImpl)
-		.passwordEncoder(passwordEncoder());
+				.userDetailsService(userDetailsServiceImpl)
+				.passwordEncoder(passwordEncoder());
 	}
 }

@@ -19,6 +19,10 @@ header li a {
     color: var(--cinza-quase-branco) !important;
 }
 
+main {
+    position: relative;
+}
+
 section,
 main,
 footer {
@@ -42,13 +46,14 @@ header li a:hover {
 }
 
 .footer {
-    height: 124px;
+    min-height: 124px;
     background: rgb(4, 52, 124) 0%;
     background: linear-gradient(
         27deg,
         rgba(4, 52, 124, 1) 0%,
         rgba(104, 129, 165, 1) 48%
     );
+
     width: 100%;
     display: flex;
     gap: 15px;
@@ -56,6 +61,8 @@ header li a:hover {
     justify-content: space-around;
     flex-wrap: wrap;
     padding: 35px 10px;
+    position: relative;
+    bottom: 0;
 }
 
 .image {

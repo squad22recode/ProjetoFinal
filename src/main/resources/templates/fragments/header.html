@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-      <body>
+    <body>
         <header th:fragment="header">
             <nav class="nav navbar navbar-expand-lg bg-transparent text-center">
                 <div class="container">
@@ -40,7 +40,7 @@
                                 >
                             </li>
 
-                            <li class="nav-item">
+                            <li class="nav-item" sec:authorize="isAnonymous()">
                                 <a class="nav-link" href="/duvidas.html"
                                     >Dúvidas frequentes</a
                                 >
@@ -53,28 +53,42 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/sobre.html">Sobre</a>
                             </li>
-                            <li class="nav-item">
+                            <li
+                                class="nav-item"
+                                sec:authorize="hasRole('ADMIN')">
+                                <a class="nav-link" href="/painel-controle"
+                                    >Painel</a
+                                >
+                            </li>
+                            <li class="nav-item" sec:authorize="isAnonymous()">
                                 <a
                                     class="nav-link active"
                                     href="/usuario/cadastro"
                                     >Cadastre-se</a
                                 >
                             </li>
-                             <li class="nav-item" th:if="${getUser}">
+                            <li class="nav-item" sec:authorize="isAnonymous()">
+                                <a class="nav-link active" href="/login"
+                                    >Login</a
+                                >
+                            </li>
+                            <li
+                                class="nav-item"
+                                sec:authorize="isAuthenticated()">
+                                <a class="nav-link active" href="/login">
+                                    <strong
+                                        th:text="${#authentication.name}"></strong
+                                ></a>
+                            </li>
+                            <li
+                                class="nav-item"
+                                sec:authorize="isAuthenticated()">
                                 <a
-                                    class="nav-item btn btn-danger btn-sm"
+                                    class="nav-item btn btn-danger"
                                     href="/logout"
                                     >Logout</a
                                 >
                             </li>
-                            <li class="nav-item" th:if="${getUser == null}">
-                                <a
-                                    class="nav-link active"
-                                    href="/login"
-                                    >Login</a
-                                >
-                            </li>
-                            
                         </ul>
                     </div>
                 </div>
