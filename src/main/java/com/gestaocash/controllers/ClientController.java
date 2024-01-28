@@ -81,12 +81,12 @@ public class ClientController {
     return "cliente/editar";
   }
 
-  @PostMapping("/editar/{id}")
-  public String updateClient(@ModelAttribute("editarCliente") Client updatedClient, @PathVariable Long id) {
-    this.clientService.saveClient(updatedClient);
-
-    return "redirect:/clientes";
-  }
+//  @PostMapping("/editar/{id}")
+//  public String updateClient(@ModelAttribute("editarCliente") Client updatedClient, @PathVariable Long id) {
+//    this.clientService.saveClient(updatedClient);
+//
+//    return "redirect:/clientes";
+//  }
 
   @GetMapping("/excluir/{id}")
   public String deleteClient(@PathVariable Long id) {

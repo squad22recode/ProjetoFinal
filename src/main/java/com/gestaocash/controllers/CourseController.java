@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gestaoCash.model.Course;
+import com.gestaoCash.model.Users;
 import com.gestaoCash.services.CourseService;
 import com.gestaoCash.services.UserService;
 import com.gestaoCash.utils.DataUserAuth;
 
 @Controller
-@RequestMapping("/cursos")
+@RequestMapping("/usuario/area-cliente")
 public class CourseController {
 
   @Autowired
@@ -29,12 +31,19 @@ public class CourseController {
 
   DataUserAuth data = new DataUserAuth();
 
-  @GetMapping
-  public String listAllCourses(Model model) {
+  @GetMapping("/area-conhecimento")
+  public ModelAndView listAllCourses() {
+	  ModelAndView view = new ModelAndView("/usuario/area-conhecimento");
     var courses = this.courseService.findAllCourse();
-    model.addAttribute("cursos", courses);
-
-    return "";
+    
+    Long id = data.DataUser().getId();
+    Users user = userService.findUserById(id);
+	view.addObject("user", user);
+    view.addObject("cursos", courses);
+    view.addObject("favorites", user.getFavoriteCourses());
+    view.addObject("courses", this.courseService.findAllCourse());
+    
+    return view;
   }
 
   // @GetMapping("/novo")
@@ -78,7 +87,7 @@ public class CourseController {
     return "redirect:/usuario/area-cliente";
   }
 
-  @GetMapping("/editar/{id}")
+  @GetMapping("area-conhecimento/editar/{id}")
   public String showEditForm(@PathVariable Long id, Model model) {
     var course = this.courseService.findCourseById(id);
     model.addAttribute("course", course);
@@ -93,7 +102,7 @@ public class CourseController {
     return "redirect:/painel-controle/curso";
   }
 
-  @GetMapping("/delete/{id}")
+  @GetMapping("area-conhecimento/delete/{id}")
   public String deleteCourse(@PathVariable Long id) {
     this.courseService.deleteCourseById(id);
 
@@ -101,7 +110,7 @@ public class CourseController {
   }
 
   // deletar cursos favoritos do usuario logado
-  @GetMapping("/excluir/{id}")
+  @GetMapping("area-conhecimento/excluir/{id}")
   public String deleteFavoriteCourse(@PathVariable Long id) {
     var user = this.userService.findUserById(data.DataUser().getId());
     var courses = user.getFavoriteCourses();

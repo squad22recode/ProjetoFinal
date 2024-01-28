@@ -174,7 +174,7 @@ public class UsersController {
 			@RequestParam(required = false, name = "date") String dateMonth) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		modelAndView.addObject("states", StateEnum.values());
-		modelAndView.addObject("courses", this.courseService.findAllCourse());
+		
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		
@@ -240,7 +240,7 @@ public class UsersController {
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
 		Users user = userService.findUserById(id);
 		model.addAttribute("user", user);
-		model.addAttribute("favorites", user.getFavoriteCourses());
+		
 		
 		model.addAttribute("totalRevenue", totalRevenue);
 		model.addAttribute("totalExpense", totalExpense);
