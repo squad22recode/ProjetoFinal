@@ -20,9 +20,10 @@
                                     th:text="${#temporals.day(exp.getData())}"></td>
                                 <td th:text="${exp.getCategoria()}"></td>
                                 <td
+                                    id="f-currency"
                                     th:text="${#numbers.formatCurrency(exp.getValor())}"></td>
                                 <td th:text="${exp.getDescricao()}"></td>
-                                <td class="d-flex">
+                                <td class="d-flex gap-2">
                                     <a
                                         th:href="@{/usuario/area-cliente/despesa/editar/{id} (id=${exp.getId()})}"
                                         class="border-0 bg-transparent">
@@ -37,7 +38,7 @@
                                         class="border-0 bg-transparent">
                                         <h5 class="mb-0">
                                             <i
-                                                class="bi bi-x-lg text-danger"></i>
+                                                class="bi bi-x-lg text-danger fw-bold"></i>
                                         </h5>
                                     </a>
                                 </td>

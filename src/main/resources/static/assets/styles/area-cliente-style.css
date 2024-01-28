@@ -30,16 +30,6 @@ header li a:hover {
     padding: 0 20px 20px 20px;
 }
 
-.card {
-    margin-bottom: 30px;
-    border: none;
-    /* border-radius: 5px; */
-    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
-    background-clip: border-box;
-    border-radius: 0.25rem;
-    /* box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.13); */
-}
-
 .profile .profile-card img {
     max-width: 120px;
 }
@@ -80,6 +70,9 @@ header li a:hover {
     font-size: 15px;
 }
 
+h5.text-c {
+    padding: 0.2rem 0;
+}
 .profile .profile-physical .card-title {
     color: #012970;
 }
@@ -98,26 +91,71 @@ header li a:hover {
     max-width: 120px;
 }
 
+.main {
+    h5 {
+        color: #212529;
+    }
+}
+
+.card {
+    margin-bottom: 30px;
+    border: none;
+    /* border-radius: 5px; */
+    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+    background-clip: border-box;
+    border-radius: 0.25rem;
+    /* box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.13); */
+}
+
 .card-study {
-    /* background-color: rgb(4, 52, 124, 0.9) !important; */
+    background: #fff;
     width: 400px !important;
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    box-shadow: #012970 0px 0px 30px 0px;
+    gap: 3px;
+    border-radius: 5px;
     justify-content: space-between;
 }
 
 .card-study .card-header {
-    background-color: var(--azul-escuro);
+    background-color: hsl(0, 0%, 0%);
     align-items: center;
     justify-content: center;
     display: flex;
     border-bottom: none;
+
     text-align: center;
-    color: var(--cinza-quase-branco);
+    color: #eee;
+    line-height: 25px;
+    font-size: 1em;
+    font-weight: bold;
+
     height: 115px;
     padding: 0;
+
+    position: relative;
+    z-index: 300;
+}
+
+.card-header::after {
+    content: '';
+    top: 0;
+    left: 0;
+
+    height: inherit;
+    width: 100%;
+
+    position: absolute;
+    z-index: -1;
+
+    background: linear-gradient(
+            -233deg,
+            rgb(0, 0, 0, 1) 70%,
+            var(--azul-escuro) 90%
+        )
+        no-repeat;
 }
 
 .card-study p {
@@ -127,12 +165,18 @@ header li a:hover {
 }
 
 .card-study .card-body {
-    color: var(--cinza-quase-branco);
+    color: #212529;
+    margin-top: 1rem;
+}
+
+.card-study form {
+    padding: 5px 20px;
 }
 
 .card-study div p {
     /* color: var(--cinza-claro); */
     color: #000;
+    padding: 5px 20px;
 }
 
 .card-study i {
@@ -141,6 +185,12 @@ header li a:hover {
 
 .card-study a {
     background-color: var(--azul-escuro);
-    width: 50%;
+    width: fit-content;
     color: var(--cinza-quase-branco);
+    margin: 5px 20px;
+}
+
+a.btn-d {
+    background: #dc3545;
+    color: #fff;
 }
