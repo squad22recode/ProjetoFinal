@@ -46,6 +46,9 @@ public class Company {
 	private List<Client> client = new ArrayList<Client>();
 	
 	@OneToMany(mappedBy = "empresa", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<Sale> sale;
+	
+	@OneToMany(mappedBy = "empresa", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Product> product = new ArrayList<Product>();
 	
 	@Column(name="categoria", length = 8)
@@ -130,6 +133,14 @@ public class Company {
 
 	public void setRazaoSocial(String razaoSocial) {
 		this.razaoSocial = razaoSocial;
+	}
+
+	public List<Sale> getSale() {
+		return sale;
+	}
+
+	public void setSale(List<Sale> sale) {
+		this.sale = sale;
 	}
 
 

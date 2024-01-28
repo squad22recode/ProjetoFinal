@@ -1,5 +1,6 @@
 package com.gestaoCash.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ import jakarta.persistence.Table;
 
 @Table
 @Entity(name = "usuarios")
-public class Users {
+public class Users implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

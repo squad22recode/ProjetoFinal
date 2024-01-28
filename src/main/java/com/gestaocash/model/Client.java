@@ -7,6 +7,9 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,7 +44,7 @@ public class Client {
   @Column(columnDefinition = "varchar(17)")
   private String telefone;
 
-  @Column(unique = true, columnDefinition = "VARCHAR(50)")
+  @Column(columnDefinition = "VARCHAR(60)")
   private String email;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -157,4 +160,12 @@ public Client() {
     this.endereco = endereco;
   }
 
+@Override
+public String toString() {
+	return "Client [id=" + id + ", cpf=" + cpf + ", nome=" + nome + ", dataNascimento=" + dataNascimento + ", telefone="
+			+ telefone + ", email=" + email + ", endereco=" + endereco + ", empresa=" + empresa + ", sale=" + sale
+			+ ", createdAt=" + createdAt + "]";
+}
+
+  
 }

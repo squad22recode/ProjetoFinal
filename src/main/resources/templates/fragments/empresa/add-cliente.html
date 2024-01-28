@@ -12,11 +12,13 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
+						<p th:text="${errorMessage}"></p>
+						<th th:text="${successMessage}"></th>
 						<form class="row g-3" method="post" th:object="${client}" th:action="@{/usuario/area-cliente/cadastrar-cliente}">
 							
 							<div class="col-md-4">
 								<label for="inputName" class="form-label">Nome</label>
-								<input type="text" class="form-control" id="inputName" required th:field="*{nome}" />
+								<input type="text" class="form-control" id="inputName" required th:field="*{nome}" maxlength="50" />
 							</div>
 							<div class="col-md-4">
 								<label for="inputCnpj" class="form-label">CPF</label>
@@ -25,7 +27,7 @@
 							<div class="col-md-4">
 								<label for="inputRazaoSocial" class="form-label">Email</label>
 								<input type="email" class="form-control" id="inputEmail"
-									 th:field="*{email}" />
+									 th:field="*{email}" maxlength="60" />
 							</div>
 							<div class="col-md-4">
 								<label for="inputRazaoSocial" class="form-label">Telefone</label>
