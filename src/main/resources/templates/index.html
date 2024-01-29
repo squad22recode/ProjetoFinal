@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  
-   <head th:replace="~{fragments/head :: head (title='GestãoCash | Pág. Inicial')}">
-
-</head>
+    <head>
+        <th:block th:include="fragments/head :: head"></th:block>
+        <link rel="stylesheet" href="/assets/styles/home-style.css" />
+        <title>GestãoCash | Pág. Inicial</title>
+    </head>
     <body>
         <div th:replace="fragments/header :: header"></div>
 

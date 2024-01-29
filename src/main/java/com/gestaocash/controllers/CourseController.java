@@ -53,7 +53,7 @@ public class CourseController {
   // return "";
   // }
 
-  @PostMapping("/novo")
+  @PostMapping("/area-conhecimento/curso/novo")
   public String saveCourse(@ModelAttribute("newCourse") Course course) {
     this.courseService.saveCourse(course);
     return "redirect:/painel-controle/curso";
@@ -86,7 +86,7 @@ public class CourseController {
     return "redirect:/usuario/area-cliente/area-conhecimento";
   }
 
-  @GetMapping("area-conhecimento/editar/{id}")
+  @GetMapping("area-conhecimento/curso/editar/{id}")
   public String showEditForm(@PathVariable Long id, Model model) {
     var course = this.courseService.findCourseById(id);
     model.addAttribute("course", course);
@@ -94,14 +94,14 @@ public class CourseController {
     return "/curso/edit";
   }
 
-  @PostMapping("/editar/{id}")
+  @PostMapping("/area-conhecimento/curso/editar/{id}")
   public String updateCourse(@ModelAttribute("course") Course updatedCourse, @PathVariable Long id) {
     this.courseService.updateCourseById(id, updatedCourse);
 
     return "redirect:/painel-controle/curso";
   }
 
-  @GetMapping("area-conhecimento/delete/{id}")
+  @GetMapping("area-conhecimento/curso/delete/{id}")
   public String deleteCourse(@PathVariable Long id) {
     this.courseService.deleteCourseById(id);
 
