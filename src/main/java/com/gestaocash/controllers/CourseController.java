@@ -33,16 +33,15 @@ public class CourseController {
 
   @GetMapping("/area-conhecimento")
   public ModelAndView listAllCourses() {
-	  ModelAndView view = new ModelAndView("/usuario/area-conhecimento");
+    ModelAndView view = new ModelAndView("/usuario/area-conhecimento");
     var courses = this.courseService.findAllCourse();
-    
+
     Long id = data.DataUser().getId();
     Users user = userService.findUserById(id);
-	view.addObject("user", user);
-    view.addObject("cursos", courses);
+    view.addObject("user", user);
+    view.addObject("courses", courses);
     view.addObject("favorites", user.getFavoriteCourses());
-    view.addObject("courses", this.courseService.findAllCourse());
-    
+
     return view;
   }
 
@@ -61,7 +60,7 @@ public class CourseController {
   }
 
   // metodo para salvar cursos favoritos do usuario logado
-  @PostMapping("/salvar")
+  @PostMapping("/area-conhecimento/curso/salvar")
   public String saveCourse(@RequestParam("name") String name, @RequestParam("conclusion") int conclusion,
       @RequestParam("description") String description, @RequestParam("url") String url,
       @RequestParam("duration") int duration) {
@@ -84,7 +83,7 @@ public class CourseController {
 
     this.userService.saveUser(user);
 
-    return "redirect:/usuario/area-cliente";
+    return "redirect:/usuario/area-cliente/area-conhecimento";
   }
 
   @GetMapping("area-conhecimento/editar/{id}")
@@ -110,7 +109,7 @@ public class CourseController {
   }
 
   // deletar cursos favoritos do usuario logado
-  @GetMapping("area-conhecimento/excluir/{id}")
+  @GetMapping("/area-conhecimento/curso/excluir/{id}")
   public String deleteFavoriteCourse(@PathVariable Long id) {
     var user = this.userService.findUserById(data.DataUser().getId());
     var courses = user.getFavoriteCourses();
@@ -122,6 +121,6 @@ public class CourseController {
 
     this.userService.saveUser(user);
 
-    return "redirect:/usuario/area-cliente";
+    return "redirect:/usuario/area-cliente/area-conhecimento";
   }
 }
