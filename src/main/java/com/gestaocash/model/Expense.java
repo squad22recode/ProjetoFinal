@@ -30,6 +30,7 @@ public class Expense {
 
   private String categoria;
 
+  @Column(nullable = false)
 @DateTimeFormat(iso = ISO.DATE)
   private LocalDate data;
 

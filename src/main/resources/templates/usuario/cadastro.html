@@ -23,6 +23,7 @@
                         type="text"
                         class="form-control"
                         id="inputName"
+                        maxlength="50"
                         required
                         th:field="*{nome}" />
                 </div>
@@ -32,8 +33,10 @@
                         type="email"
                         class="form-control"
                         id="inputEmail"
+                        maxlength="50"
                         required
                         th:field="*{email}" />
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                     <label for="inputTel" class="form-label">Telefone</label>
@@ -83,6 +86,7 @@
                     <input
                         type="password"
                         class="form-control"
+                        maxlength="50"
                         required
                         id="inputPassword"
                         th:field="*{senha}" />
@@ -128,6 +132,7 @@
                         type="text"
                         class="form-control"
                         required
+                        maxlength="20"
                         id="inputDistrict"
                         th:field="*{enderecoUsuario.bairro}" />
                 </div>
@@ -136,6 +141,7 @@
                     <input
                         type="text"
                         class="form-control"
+                        maxlength="25"
                         required
                         id="inputCity"
                         th:field="*{enderecoUsuario.cidade}" />
@@ -145,13 +151,13 @@
                     <select
                         id="inputState"
                         class="form-select"
-                        th:field="*{enderecoUsuario.estado}">
+                        th:field="*{enderecoUsuario.estado}" >
                         <option selected value="null">Selecione</option>
 
                         <option
                             th:each="state: ${states}"
                             th:text="${state.descricao}"
-                            th:value="${state.descricao}"></option>
+                            th:value="${state.descricao}" ></option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -174,7 +180,7 @@
                         type="text"
                         class="form-control"
                         id="inputFacebook"
-                        th:field="*{facebook}" />
+                        th:field="*{facebook}" maxlength="100" />
                 </div>
                 <div class="col-md-8">
                     <label for="inputInstagram" class="form-label"
@@ -184,7 +190,7 @@
                         type="text"
                         class="form-control"
                         id="inputInstagram"
-                        th:field="*{instagram}" />
+                        th:field="*{instagram}"  maxlength="100"/>
                 </div>
                 <div class="col-md-8">
                     <label for="inputLinkedin" class="form-label"
@@ -194,7 +200,7 @@
                         type="text"
                         class="form-control"
                         id="inputLinkedin"
-                        th:field="*{linkedin}" />
+                        th:field="*{linkedin}" maxlength="100" />
                 </div>
 
                 <div class="col-12">

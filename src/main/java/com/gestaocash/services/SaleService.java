@@ -25,6 +25,7 @@ public interface SaleService {
 	Sale findSaleById(long id);
 	String converterListToJson(List<Sale> sale, String dataFilter);
 	int countSales(Company company,String filter);
+	void deleteSale(long id);
 //a fazer
 	int calcPercentDate(List<Sale> sale, String dateType);
 	List<FinanceDto> controlFinance(List<Sale> sale);

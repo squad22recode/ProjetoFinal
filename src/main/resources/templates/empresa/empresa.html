@@ -111,7 +111,7 @@
 											<div class="col-lg-4">
 												<div class="card info-card sales-card">
 
-													<div class="card-body">
+													<a th:href="@{empresa/vendas}" class="card-body">
 														<h5 class="card-title">Vendas <span
 																th:text="'| ' + ${filterString}">
 															</span></h5>
@@ -128,12 +128,8 @@
 
 															</div>
 														</div>
-													</div>
-													<a href="/usuario/area-cliente/cadastrar-venda">
-														<h5 class="ms-3" role="button" data-bs-toggle="modal"
-															data-bs-target="#addSaleModal"><i class="bi bi-plus-lg"></i>
-															Adicionar Venda</h5>
 													</a>
+												
 												</div>
 											</div><!-- Fim card vendas -->
 

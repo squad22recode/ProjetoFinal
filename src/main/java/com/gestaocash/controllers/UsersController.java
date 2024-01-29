@@ -118,12 +118,16 @@ public class UsersController {
 	@PostMapping("/cadastro")
 	public ModelAndView cadastrar(Model model, @ModelAttribute("user") Users user,
 			@RequestParam("inputImg") MultipartFile file, BindingResult result) throws IOException {
-
 		try {
 			user.setImagemPerfil(file.getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		// Verificar se o e-mail já está cadastrado
+	    if (userService.existsEmail(user.getEmail())) {
+	        result.rejectValue("email", "email.duplicado", "E-mail já cadastrado. Escolha outro e-mail.");
+	    }
 
 		// Users existingUser = userService.findByUserEmail(user.getEmail());
 
@@ -143,20 +147,9 @@ public class UsersController {
 		user.setSenha(senhaEncriptada);
 		user.setTipoUsuario("user");
 
-		Role role = this.roleRepository.findByAuthority("ROLE_COMUM");
-
-		if (role == null) {
-			throw new IllegalStateException("'ROLE_COMUM' não encontrada");
-		}
-		Set<Role> roles = new HashSet<>();
-		roles.add(role);
-
-		user.setRoles(roles);
-
 		userService.saveUser(user);
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		return modelAndView;
-
 	}
 
 	@GetMapping("/imagem/{id}")
@@ -171,10 +164,9 @@ public class UsersController {
 
 	@GetMapping("/area-cliente")
 	public ModelAndView areaDoCliente(Model model, Revenue revenue,
-			@RequestParam(required = false, name = "date") String dateMonth) {
+			@RequestParam(required = false, name = "dateExp") String dateMonthE,@RequestParam(required = false, name = "dateRev") String dateMonthR) {
 		ModelAndView modelAndView = new ModelAndView("usuario/area-do-cliente");
 		modelAndView.addObject("states", StateEnum.values());
-		
 		modelAndView.addObject("expense", new Expense());
 		modelAndView.addObject("revenue", new Revenue());
 		
@@ -199,15 +191,23 @@ public class UsersController {
 		Locale local = new Locale("pt", "BR");
 		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MMMM-yyyy", local);
 		DateTimeFormatter formatoDois = DateTimeFormatter.ofPattern("MMMM-yyyy", local);
-
-		if (dateMonth != null) {
-			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-" + dateMonth, formato), id)
-					.collect(Collectors.toList());
-			expenses = expenseService.findExpenseFilterDate(LocalDate.parse("01-" + dateMonth, formato), id)
+		
+		if (dateMonthE != null) {
+//			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-" + dateMonth, formato), id)
+//					.collect(Collectors.toList());
+			expenses = expenseService.findExpenseFilterDate(LocalDate.parse("01-" + dateMonthE, formato), id)
 					.collect(Collectors.toList());
 		} else {
-			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id).collect(Collectors.toList());
+//			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id).collect(Collectors.toList());
 			expenses = expenseService.findExpenseFilterDate(LocalDate.now(), id).collect(Collectors.toList());
+		}
+		
+		if (dateMonthR != null) {
+			revenues = revenueService.findRevenueFilterDate(LocalDate.parse("01-" + dateMonthR, formato), id)
+					.collect(Collectors.toList());
+	
+		} else {
+			revenues = revenueService.findRevenueFilterDate(LocalDate.now(), id).collect(Collectors.toList());
 		}
 
 		// ObjectMapper mapper = new ObjectMapper();
@@ -219,40 +219,47 @@ public class UsersController {
 
 		// Locale local = new Locale("pt","BR");
 		// DateFormat formato = new SimpleDateFormat("MMMM yyyy",local);
-		Set<String> data = new HashSet<>();
+		Set<String> dataExp = new HashSet<>();
+		Set<String> dataRev = new HashSet<>();
 
-		if (expenseService.findExpenseAndUser(id).size() > revenueService.findRevenueAndUser(id).size()) {
+		
 			for (Expense e : expenseService.findExpenseAndUser(id)) {
-				data.add(formatoDois.format(e.getData()).substring(0, 1).toUpperCase()
+				dataExp.add(formatoDois.format(e.getData()).substring(0, 1).toUpperCase()
 						.concat(formatoDois.format(e.getData()).substring(1)));
 			}
-		} else {
+		
 
 			for (Revenue e : revenueService.findRevenueAndUser(id)) {
-				data.add(formatoDois.format(e.getData()).substring(0, 1).toUpperCase()
+				dataRev.add(formatoDois.format(e.getData()).substring(0, 1).toUpperCase()
 						.concat(formatoDois.format(e.getData()).substring(1)));
 			}
-		}
+		
 
 		String totalMonth = revenueService.calcTotalMonth(revenueService.findRevenueAndUser(id), LocalDate.now().getYear());
 
 		double totalRevenue = revenueService.calcTotalRevenue(revenues);
 		double totalExpense = expenseService.calcTotalExpenses(expenses);
 		Users user = userService.findUserById(id);
+		
+		
 		model.addAttribute("user", user);
-		
-		
 		model.addAttribute("totalRevenue", totalRevenue);
 		model.addAttribute("totalExpense", totalExpense);
-		model.addAttribute("data", data);
+		model.addAttribute("dataExp", dataExp);
+		model.addAttribute("dataRev", dataRev);
 		model.addAttribute("totalMonth", totalMonth);
 		model.addAttribute("months", months);
 		model.addAttribute("cats", cats);
 		model.addAttribute("expsString", expe);
 		model.addAttribute("exps", expenses);
 		model.addAttribute("revs", revenues);
-		model.addAttribute("dateMonth",
-				dateMonth != null ? dateMonth.substring(0, 1).toUpperCase().concat(dateMonth.substring(1)).replace("-", " ")
+
+		model.addAttribute("dateMonthE",
+				dateMonthE != null ? dateMonthE.substring(0, 1).toUpperCase().concat(dateMonthE.substring(1)).replace("-", " ")
+						: formatoDois.format(LocalDate.now()).substring(0, 1).toUpperCase()
+								.concat(formatoDois.format(LocalDate.now()).substring(1)));
+		model.addAttribute("dateMonthR",
+				dateMonthR != null ? dateMonthR.substring(0, 1).toUpperCase().concat(dateMonthR.substring(1)).replace("-", " ")
 						: formatoDois.format(LocalDate.now()).substring(0, 1).toUpperCase()
 								.concat(formatoDois.format(LocalDate.now()).substring(1)));
 		return modelAndView;

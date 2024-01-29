@@ -166,7 +166,7 @@ public class CompanyController {
 		usuario.setEmpresa(compService.saveCompany(company));
 		userService.saveUser(usuario);
 
-		return "redirect:/usuario/area-cliente";
+		return "redirect:/usuario/area-cliente/empresa";
 	}
 
 	@PostMapping("/editar-empresa")
@@ -180,7 +180,7 @@ public class CompanyController {
 
 		compService.saveCompany(company);
 		userService.saveUser(usuario);
-		return "redirect:/usuario/area-cliente";
+		return "redirect:/usuario/area-cliente/empresa";
 	}
 
 }

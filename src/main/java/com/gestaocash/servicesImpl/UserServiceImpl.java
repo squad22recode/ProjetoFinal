@@ -68,9 +68,15 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Optional<Users> findByEmail(String email) {
-    // TODO Auto-generated method stub
+   
     return Optional.empty();
   }
+
+@Override
+public boolean existsEmail(String email) {
+	return this.userRepository.existsByEmail(email);
+	
+}
 
   // @Override
   // public UserDetails loadUserByUsername(String username) throws

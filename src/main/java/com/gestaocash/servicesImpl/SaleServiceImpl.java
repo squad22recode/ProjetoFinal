@@ -67,7 +67,6 @@ public class SaleServiceImpl implements SaleService {
 
 	@Override
 	public Sale findSaleById(long id) {
-
 		return saleRepo.findById(id).get();
 	}
 
@@ -250,6 +249,12 @@ public class SaleServiceImpl implements SaleService {
 					.collect(Collectors.toList());
 		}
 		return sales;
+	}
+
+	@Override
+	public void deleteSale(long id) {
+		saleRepo.deleteById(id);
+		
 	}
 
 }

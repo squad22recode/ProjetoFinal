@@ -91,7 +91,7 @@ public class Users implements Serializable {
 	@Column(columnDefinition = "VARCHAR(10)")
 	private String tipoUsuario;
 
-	@Column(columnDefinition = "CHAR(14)")
+	@Column(columnDefinition = "CHAR(14)", unique = true)
 	private String cpf;
 
 	@Column(columnDefinition = "varchar(50)")
@@ -103,7 +103,7 @@ public class Users implements Serializable {
 	@Column(columnDefinition = "varchar(16)")
 	private String telefone;
 
-	@Column(columnDefinition = "VARCHAR(50)")
+	@Column(columnDefinition = "VARCHAR(50)", unique = true)
 	private String email;
 
 	@Column(columnDefinition = "longblob")

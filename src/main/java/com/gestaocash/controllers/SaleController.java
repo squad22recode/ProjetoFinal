@@ -6,10 +6,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,7 +70,7 @@ public class SaleController {
 
 		saveItemSales(savedSale);
 
-		return "redirect:/usuario/area-cliente/empresa";
+		return "redirect:/usuario/area-cliente/empresa/vendas";
 
 	}
 
@@ -89,6 +93,44 @@ public class SaleController {
 		view.addObject("products", products);
 		return view;
 
+	}
+	@GetMapping("empresa/vendas")
+	public ModelAndView getSales(@RequestParam(name = "filtro", defaultValue = "mes") String filter,
+			@RequestParam(name = "filtro", defaultValue = "id") String sort,
+			@RequestParam(required = false, name = "size", defaultValue = "10") String size,
+			@RequestParam(required = false, name = "page", defaultValue = "0") String page) {
+		ModelAndView view = new ModelAndView("/empresa/vendas");
+		Pageable pagination = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size), Sort.by(sort));
+		List<Sale> sales = saleService.findAllSalesByCompanyAndFilter(data.DataUser().getEmpresa(), pagination, filter);
+		
+		view.addObject("sales", sales);
+		view.addObject("page", Integer.parseInt(page));
+	
+		return view;
+	}
+	
+	@GetMapping("empresa/editar-venda/{id}")
+	public String editSale(@PathVariable long id, Model model) {
+		Sale sale = saleService.findSaleById(id);
+		List<Product> products = prodService.findAllProducts().stream()
+				.filter(product -> product.getEmpresa().getIdEmpresa() == data.DataUser().getEmpresa().getIdEmpresa())
+				.collect(Collectors.toList());
+		List<Client> clients = clientService.findAllClient().stream()
+				.filter(client -> client.getEmpresa().getIdEmpresa() == data.DataUser().getEmpresa().getIdEmpresa())
+				.collect(Collectors.toList());
+		
+		model.addAttribute("sale", sale);
+		model.addAttribute("products", products);
+		model.addAttribute("clients", clients);
+		
+		return"/empresa/editar-venda";
+	}
+	
+	@GetMapping("empresa/delete/{id}")
+	public String deleteBySale(@PathVariable long id) {
+		
+		saleService.deleteSale(id);
+		return"redirect:../vendas";
 	}
 
 	private void updateProductQuantities(Sale sale) {
