@@ -1,7 +1,7 @@
 <h1 align="center"> GestãoCash </H1>
 
 <h1 align="center">
-        <img src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/blob/main/images/logo.png" width="70px" height="70px" />
+        <img src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/main/images/logo.png" width="70px" height="70px" />
 </h1>
 
 
