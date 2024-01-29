@@ -1,4 +1,19 @@
-# GestãoCash
+<h1 align="center"> GestãoCash </H1>
+
+<h1 align="center">
+        <img src="https://raw.githubusercontent.com/squad22recode/gestaocash_imagens/blob/main/images/logo.png" width="70px" height="70px" />
+</h1>
+
+
+<p align="center">
+ <img src="https://img.shields.io/static/v1?label=Tipo&message=Desafio&color=8257E5&labelColor=000000" alt="Desafio" />
+</p>
+
+<p align="center">
+ <a href="#-about">Executar</a> 
+ <a href="#-Features">Sobre</a> 
+ <a href="#-layout">Layout</a> 
+</p>
 
 ## Descrição do projeto:
 
@@ -35,15 +50,15 @@ O GestãoCash é uma aplicação para ajudar pequenos empreendedores no gerencia
 
 ## 🚀 Como executar o projeto.
 
-### Pré-requisitos
+### Pré-requisitos:
 
-Antes de começar, você vai precisar ter instalado em sua máquina: [java sdk]() [maven](). 
+Antes de começar, você vai precisar ter instalado em sua máquina: [java sdk](), [maven](). 
 
 Além disto é bom ter um editor/ide para trabalhar.
 
 - Clonar repositório git
 - Construir o projeto:
-- 
+  
 ```
 $ git clone https://github.com/squad22recode/ProjetoFinal.git
 $ cd caminho/do/seu/projeto
