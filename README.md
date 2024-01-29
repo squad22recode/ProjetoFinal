@@ -33,7 +33,7 @@ O GestãoCash é uma aplicação para ajudar pequenos empreendedores no gerencia
 -   JAVA SPRING
 -   MYSQL
 
-##🚀 Como executar o projeto.
+## 🚀 Como executar o projeto.
 
 ### Pré-requisitos
 
@@ -43,12 +43,15 @@ Além disto é bom ter um editor/ide para trabalhar.
 
 - Clonar repositório git
 - Construir o projeto:
+- 
 ```
+$ git clone https://github.com/squad22recode/ProjetoFinal.git
 $ cd caminho/do/seu/projeto
 $ ./mvnw clean package ou mvn clean install (com maven instalado na máquina)
 
 ```
 - Executar a aplicação:
+  
 ```
 $ cd target
 
